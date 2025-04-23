@@ -3,6 +3,7 @@ extends:
 
 rules:
   header-max-length: [1, 'always', 72]
+  body-max-line-length: [1, 'always', 100]  # re-enable this rule
   type-enum:
     - 2
     - 'always'
