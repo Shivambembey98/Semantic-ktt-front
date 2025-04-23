@@ -3,7 +3,8 @@ name: Release
 on:
   push:
     branches:
-      - main  # or your release branch
+      - main  
+      - develop
 
 permissions:
   contents: write  # allow pushing tags, creating releases
@@ -23,11 +24,9 @@ jobs:
           node-version: 18  # or whatever you're using
 
       - name: Install dependencies
-        working-directory: Rentte/Rentte-aws-lambda
         run: npm ci
 
       - name: Semantic Release
-        working-directory: Rentte/Rentte-aws-lambda
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
