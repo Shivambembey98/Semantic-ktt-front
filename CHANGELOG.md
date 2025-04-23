@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.0.0...v1.1.0) (2025-04-23)
+
+
+### Features
+
+* Update commit-msg ([dcf42e3](https://github.com/Shivambembey98/Semantic-ktt-front/commit/dcf42e3da054e88efea110abb78d74f6ae3ff9ec))
+* Update validate-commits.yml ([22077b1](https://github.com/Shivambembey98/Semantic-ktt-front/commit/22077b146a65708cd1b02c0fedb17fe7201c4670))
+
 # 1.0.0 (2025-04-23)
 
 
