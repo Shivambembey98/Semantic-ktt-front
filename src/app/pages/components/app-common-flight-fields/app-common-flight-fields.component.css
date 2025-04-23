@@ -1,0 +1,353 @@
+/* new min css */
+.badge {
+  background-color: #f3f4f6 !important;
+  color: var(--black);
+  border-radius: 18px;
+  line-height: 20px;
+  font-weight: 500;
+}
+.badge:hover {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+.active {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+/* Flight tabs styling */
+.flight-tab {
+  padding: 5px 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.remove-icon {
+  color: red;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.add-flight {
+  color: #2a6f97;
+}
+
+/* Form controls */
+.form-select {
+  color: #757575;
+  border: solid 1px #BCC8D1;
+}
+
+.form-control {
+  color: #757575;
+  border: solid 1px #BCC8D1;
+}
+
+/* Continue button */
+.btn-continue {
+  background-color: var(--primary);
+  color: white;
+  width: 100%;
+  border: none;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .flight-tab {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .remove-icon {
+    font-size: 12px;
+  }
+
+  .add-flight {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .flight-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Import from Landing */
+
+#hero {
+  position: relative;
+}
+
+.carousel-item {
+  height: 750px !important;
+}
+.item-one {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../../assets/images/hero.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.item-two {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../../assets/images/hero1.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.item-three {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../../assets/images/hero2.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* New form */
+.form-container {
+  max-width: 550px;
+  z-index: 10;
+  border-radius: 10px;
+  box-shadow: 0 0px 0px 0px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.form-container label {
+  margin-bottom: 5px;
+}
+.nav-pills {
+  display: flex;
+  background-color: white;
+}
+.nav-item input {
+  cursor: pointer;
+}
+/* Add space between input fields */
+.form-container .form-control {
+  margin-bottom: 10px;
+}
+.form-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 50px;
+  background-color: white;
+  padding: 16px;
+  /* border-radius: 8px; */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.form-type {
+  border-bottom: 5px solid #007191;
+}
+.card {
+  border: none;
+  border-radius: 0%;
+}
+.mobile-dropdown{
+  display: none;
+}
+/* multi city flight tabs */
+.flight-tab {
+  padding: 5px 10px;
+  white-space: nowrap; /* Prevents text from wrapping */
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.remove-icon {
+  color: red;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.add-flight {
+  color: #2a6f97;
+}
+@media (max-width: 767px) {
+  #carouselExampleControls {
+    display: none;
+  }
+  .mobile-dropdown{
+    display: block;
+  }
+  .form-container {
+    position: relative;
+    transform: none; /* Reset transform */
+    padding: 1.5rem;
+    margin-left: 0%;
+    border: none;
+    border-radius: 0%;
+  }
+  .nav-item .btn {
+    font-size: 14px; /* Smaller font size for mobile */
+  }
+
+  .form-container {
+    background-image: url("../../../../assets/images/mobile-form-bg.jpg"); /* Your mobile background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: transparent;
+  }
+  .form-type {
+    border-bottom: 3px solid #007191;
+  }
+
+  /* From and To Fields */
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* gap: 10px; */
+    margin-bottom: 10px;
+  }
+  .col-md-5 {
+    width: 40%;
+  }
+
+  .col-md-2 {
+    width: 20%;
+    text-align: center;
+  }
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  /* Date Pickers */
+  .col-md-5 input[type="date"] {
+    font-size: 14px;
+  }
+
+  /* Special Fares */
+  .special {
+    display: flex;
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    scroll-padding: 10px;
+    background-color: white;
+  }
+  .special::-webkit-scrollbar {
+    display: none; /* Hides scrollbar for WebKit browsers */
+  }
+
+  .special {
+    -ms-overflow-style: none; /* Hides scrollbar for Internet Explorer */
+    scrollbar-width: none; /* Hides scrollbar for Firefox */
+  }
+
+  .special .badge {
+    scroll-snap-align: start;
+    flex: 0 0 30%;
+    background: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .special .badge.active {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .special .badge:hover {
+    opacity: 0.8;
+  }
+
+  /* Routes and Economy */
+  .col-md-6 {
+    width: 48%;
+  }
+
+  .col-md-6 select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  /* Search Button */
+  .btn-continue {
+    width: 100%;
+    border: none;
+    padding: 6px;
+    font-size: 16px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-continue img {
+    width: 16px;
+    margin-right: 8px;
+  }
+  .passenger-input {
+    display: none;
+  }
+
+  /* multi city flight tabs  */
+  .flight-tab {
+    font-size: 12px; /* Reduce text size */
+    padding: 5px 8px; /* Adjust padding */
+  }
+
+  .remove-icon {
+    font-size: 12px;
+  }
+
+  .add-flight {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .flight-tabs {
+    display: flex;
+    flex-wrap: wrap; /* Ensures wrapping in mobile view */
+    gap: 8px;
+  }
+}
+
+.dropdown-menu {
+  background-color: #f7f7f7;
+  width: 100%;
+}
+.passenger-type {
+  font-size: 14px;
+}
+.dropdown-toggle {
+  font-size: 14px;
+  width: 100%;
+  border: solid #ccc;
+  border-radius: 5px;
+}
+

@@ -1,0 +1,68 @@
+.main {
+  background: white;
+  border-radius: 6px;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 450px;
+}
+.heading {
+  font-size: 18px;
+  font-family: var(--poppins);
+}
+.err-msg {
+  font-size: 14px;
+}
+.active {
+  background-color: var(--primary) !important
+}
+.title{
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
+}
+.input-group-text{
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+}
+input[type=button]:focus {
+  background-color: var(--primary);
+  color: white;
+}
+.links-text{
+  color: #007191;
+}
+.btn-continue {
+  background-color: var(--primary);
+}
+::ng-deep .iti__country-list {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+::ng-deep .iti {
+  width: 100% !important;
+}
+::ng-deep .iti__tel-input {
+  width: 100% !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border: 0;
+  padding: 0%;
+}
+::ng-deep .iti__tel-input .is-invalid .iti__selected-flag {
+  border: 1px solid red !important;
+  border-radius: 5px;
+}
+
+::ng-deep .iti__tel-input .is-invalid input {
+  border: 1px solid red !important;
+  border-radius: 5px;
+}
+.form-select {
+  padding-right: 1.5rem; /* Reduce space for the arrow */
+  background-size: 8px 8px; /* Adjust icon size */
+}
+/* Default state — user hasn't selected anything */
+select.form-select.title:has(option[value=""]:checked) {
+  color: #6b6c6e ; /* light gray for placeholder */
+}

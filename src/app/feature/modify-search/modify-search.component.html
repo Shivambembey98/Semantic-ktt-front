@@ -1,0 +1,1119 @@
+<!-- Modify Search Component -->
+<div class="flight-modify container-fluid mb-2 p-4">
+  <div class="row align-items-center">
+    <!-- Dropdown -->
+    <div class="d-flex flex-column flex-lg-row mb-3">
+      <div class="dropdown">
+        <button
+          class="btn dropdown-toggle"
+          type="button"
+          id="tripTypeDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{ activeTab }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="tripTypeDropdown">
+          <li>
+            <a
+              class="dropdown-item form-type-dropdown"
+              (click)="toggleOneWayTrip()"
+            >
+              One Way
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item form-type-dropdown"
+              (click)="toggleRoundTrip()"
+            >
+              Round Trip
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item form-type-dropdown"
+              (click)="toggleMultiCity()"
+            >
+              Multi City
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- One Way Form -->
+    <div *ngIf="oneWayForm" class="container">
+      <form [formGroup]="oneWayFormData" (ngSubmit)="submitOneWayFormData()">
+        <div class="oneway-container">
+          <div class="row mb-4 align-items-center">
+            <div
+              class="col-lg-6 d-flex flex-column flex-lg-row align-items-start mb-3 mb-sm-0"
+            >
+              <!-- Departure and Arrival Cities -->
+              <div
+                class="flight-route d-flex align-items-center justify-content-between mb-3 mb-lg-0"
+              >
+                <!-- Origin Airport -->
+                <div class="d-flex align-items-center">
+                  <img
+                    src="../../../assets/icons/la_plane-departure.svg"
+                    class="me-2"
+                    alt="Departure"
+                  />
+                  <ng-select
+                    [items]="listOfAirports"
+                    bindLabel="displayLabel"
+                    bindValue="iataCode"
+                    placeholder="Select Airport"
+                    [clearable]="false"
+                    formControlName="origin"
+                    [typeahead]="searchInput$"
+                    (search)="onSearch($event.term)"
+                    (change)="selectAirport($event, 'origin')"
+                    [ngClass]="{
+                      'is-invalid':
+                        oneWayFormData.get('origin')?.invalid &&
+                        oneWayFormData.get('origin')?.touched
+                    }"
+                  >
+                    <!-- Custom template for the selected item -->
+                    <ng-template ng-label-tmp let-item="item">
+                      <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                    </ng-template>
+
+                    <!-- Custom template for the dropdown options -->
+                    <ng-template ng-option-tmp let-item="item">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span>{{ item.airportCity }}</span>
+                          (<span>{{ item.iataCode }}</span
+                          >)
+                          <br />
+                          <span style="font-size: 10px; color: gray">{{
+                            item.airportName
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+
+                <!-- Arrow Icon -->
+                <div
+                  class="d-flex align-items-center arrow-container ms-3 me-3"
+                >
+                  <img
+                    src="assets/icons/form arrow.svg"
+                    alt="arrow"
+                    class="arrow-icon"
+                  />
+                </div>
+
+                <!-- Destination Airport -->
+                <div class="d-flex align-items-center">
+                  <img
+                    src="../../../assets/icons/la_plane-arrival.svg"
+                    class="me-2"
+                    alt="Arrival"
+                  />
+                  <ng-select
+                    [items]="listOfAirports"
+                    bindLabel="displayLabel"
+                    bindValue="iataCode"
+                    placeholder="Select Airport"
+                    [clearable]="false"
+                    formControlName="destination"
+                    [typeahead]="searchInput$"
+                    (search)="onSearch($event.term)"
+                    (change)="selectAirport($event, 'destination')"
+                    [ngClass]="{
+                      'is-invalid':
+                        oneWayFormData.get('destination')?.invalid &&
+                        oneWayFormData.get('destination')?.touched
+                    }"
+                  >
+                    <!-- Custom template for the selected item -->
+                    <ng-template ng-label-tmp let-item="item">
+                      <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                    </ng-template>
+
+                    <!-- Custom template for the dropdown options -->
+                    <ng-template ng-option-tmp let-item="item">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span>{{ item.airportCity }}</span>
+                          (<span>{{ item.iataCode }}</span
+                          >)
+                          <br />
+                          <span style="font-size: 10px; color: gray">{{
+                            item.airportName
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <!-- Date Information Section -->
+            <div class="col-lg-4 col-md-12 d-flex flex-wrap mb-3 mb-sm-0">
+              <!-- Departure Date -->
+              <div class="col-6 px-2">
+                <div class="date-info d-flex flex-column">
+                  <div class="d-flex align-items-center">
+                    <img
+                      class="me-2"
+                      style="width: 25px"
+                      src="../../../assets/icons/calender.svg"
+                    />
+                    <label for="from">Departure</label>
+                  </div>
+
+                  <!-- Input field for date -->
+                  <input
+                    class="form-control border-0 mt-1 p-0 reduced-date-input"
+                    name="departure"
+                    type="date"
+                    required
+                    formControlName="fromDate"
+                    [attr.min]="today"
+                    style="color: #007191"
+                    (change)="updateMinToDate()"
+                    [ngClass]="{
+                      'is-invalid':
+                        oneWayFormData.get('fromDate')?.invalid &&
+                        oneWayFormData.get('fromDate')?.touched
+                    }"
+                  />
+                </div>
+              </div>
+
+              <!-- Return Date -->
+              <div class="col-6 px-2">
+                <div class="date-info d-flex flex-column">
+                  <div class="d-flex align-items-center">
+                    <img
+                      class="me-2"
+                      style="width: 25px"
+                      src="../../../assets/icons/calender.svg"
+                    />
+                    <label for="from">Return</label>
+                  </div>
+                  <input
+                    class="form-control border-0 mt-1 p-0 reduced-date-input"
+                    name="return"
+                    type="date"
+                    formControlName="toDate"
+                    [attr.min]="minToDate"
+                    style="color: #007191"
+                    (change)="toggleRoundTrip()"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Modify Search Button -->
+            <div
+              class="col-lg-2 col-md-12 text-md-end text-center mt-lg-0 mt-md-3 mt-3"
+            >
+              <button
+                type="button"
+                class="btn modify-search mb-2"
+                data-bs-toggle="collapse"
+                data-bs-target="#expandable-section"
+                aria-expanded="false"
+                aria-controls="expandable-section"
+              >
+                <img src="../../../assets/icons/Vector.svg" />
+                Show More
+              </button>
+            </div>
+          </div>
+          <!-- Expandable Section -->
+          <div class="collapse mt-4" id="expandable-section">
+            <div class="row">
+              <div class="col-lg-4 col-12">
+                <label class="mb-2" for="passenger">Passengers</label>
+                <div class="dropdown" data-bs-auto-close="outside">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    id="passengerDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ getPassengerSummary() }}
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="passengerDropdown">
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Adult (12+ years)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('adult', $event)"
+                          [disabled]="passengerCounts.adult === 1"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.adult }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('adult', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Child (2-12 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('child', $event)"
+                          [disabled]="passengerCounts.child === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.child }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('child', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Infant (0-2 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('infant', $event)"
+                          [disabled]="passengerCounts.infant === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.infant }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('infant', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Special Fares and Routes Section -->
+            <div class="row mt-2 g-3">
+              <!-- Special Fares Section -->
+              
+                <!-- Special Fares Section -->
+                <div class="col-lg-7 col-md-6">
+                  <label>Special fares</label>
+                  <div class="special d-flex flex-wrap gap-lg-4 gap-2 mt-2">
+                    <span *ngFor="let fare of specialFares" class="btn badge" [class.active]="isSpecialFareSelected(fare.id)"
+                      (click)="toggleSpecialFare(fare.id)">
+                      {{fare.label}}
+                    </span>
+                  </div>
+                </div>
+  
+
+              <!-- Routes Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="routes">Routes</label>
+                <select
+                  id="routes"
+                  class="form-select"
+                  formControlName="routes"
+                >
+                  <option value="Non Stop">Non Stop</option>
+                  <option value="1 Stop">1 Stop</option>
+                  <option value="2 Stop">2 Stop</option>
+                </select>
+              </div>
+
+              <!-- Choose Economy Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="economy">Class</label>
+                <select
+                  id="economy"
+                  class="form-select"
+                  formControlName="class"
+                >
+                  <option value="Economy">Economy</option>
+                  <option value="Premium Economy">Premium Economy</option>
+                  <option value="Business">Business</option>
+                  <option value="First Class">First Class</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row col-lg-2 col-md-4 mt-2">
+            <button
+              type="submit"
+              class="btn btn-continue"
+              [disabled]="isLoading || oneWayFormData.invalid">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <img
+                *ngIf="!isLoading"
+                src="../../../assets/icons/search.svg"
+                alt="Search Icon"
+                class="me-1"
+              />
+              {{ isLoading ? 'Searching...' : 'Search Flights' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Round Trip Form -->
+    <div *ngIf="roundTripForm" class="container">
+      <form
+        [formGroup]="roundTripFormData"
+        (ngSubmit)="submitRoundTripFormData()"
+      >
+        <div class="roundtrip-container">
+          <div class="row mb-4 align-items-center">
+            <div
+              class="col-lg-6 d-flex flex-column flex-lg-row align-items-start mb-3 mb-sm-0"
+            >
+              <!-- Departure and Arrival Cities -->
+              <div
+                class="flight-route d-flex align-items-center justify-content-between mb-3 mb-lg-0"
+              >
+                <!-- Origin Airport -->
+                <div class="d-flex align-items-center me-3">
+                  <img
+                    src="../../../assets/icons/la_plane-departure.svg"
+                    class="me-2"
+                    alt="Departure"
+                  />
+                  <ng-select
+                    [items]="listOfAirports"
+                    bindLabel="displayLabel"
+                    bindValue="iataCode"
+                    placeholder="Select Airport"
+                    [clearable]="false"
+                    formControlName="origin"
+                    (change)="selectAirport($event, 'origin')"
+                    [typeahead]="searchInput$"
+                    (search)="onSearch($event.term)"
+                    [ngClass]="{
+                      'is-invalid':
+                        roundTripFormData.get('origin')?.invalid &&
+                        roundTripFormData.get('origin')?.touched
+                    }"
+                  >
+                    <!-- Custom template for the selected item -->
+                    <ng-template ng-label-tmp let-item="item">
+                      <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                    </ng-template>
+
+                    <!-- Custom template for the dropdown options -->
+                    <ng-template ng-option-tmp let-item="item">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span>{{ item.airportCity }}</span>
+                          (<span>{{ item.iataCode }}</span
+                          >)
+                          <br />
+                          <span style="font-size: 10px; color: gray">{{
+                            item.airportName
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+
+                <!-- Arrow Icon -->
+                <div
+                  class="d-flex align-items-center justify-content-center me-3 arrow-container"
+                >
+                  <img
+                    src="assets/icons/form arrow.svg"
+                    alt="arrow"
+                    class="arrow-icon"
+                  />
+                </div>
+
+                <!-- Destination Airport -->
+                <div class="d-flex align-items-center">
+                  <img
+                    src="../../../assets/icons/la_plane-arrival.svg"
+                    class="me-2"
+                    alt="Arrival"
+                  />
+                  <ng-select
+                    [items]="listOfAirports"
+                    bindLabel="displayLabel"
+                    bindValue="iataCode"
+                    placeholder="Select Airport"
+                    [clearable]="false"
+                    formControlName="destination"
+                    (change)="selectAirport($event, 'destination')"
+                    [typeahead]="searchInput$"
+                    (search)="onSearch($event.term)"
+                    [ngClass]="{
+                      'is-invalid':
+                        roundTripFormData.get('destination')?.invalid &&
+                        roundTripFormData.get('destination')?.touched
+                    }"
+                  >
+                    <!-- Custom template for the selected item -->
+                    <ng-template ng-label-tmp let-item="item">
+                      <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                    </ng-template>
+
+                    <!-- Custom template for the dropdown options -->
+                    <ng-template ng-option-tmp let-item="item">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span>{{ item.airportCity }}</span>
+                          (<span>{{ item.iataCode }}</span
+                          >)
+                          <br />
+                          <span style="font-size: 10px; color: gray">{{
+                            item.airportName
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <!-- Date Information Section -->
+            <div class="col-lg-4 col-md-12 d-flex flex-wrap mb-3 mb-sm-0">
+              <!-- Departure Date -->
+              <div class="col-6 px-2">
+                <div class="date-info d-flex flex-column">
+                  <div class="d-flex align-items-center">
+                    <img
+                      class="me-2"
+                      style="width: 25px"
+                      src="../../../assets/icons/calender.svg"
+                    />
+                    <label for="from">Departure</label>
+                  </div>
+                  <!-- Input field for date -->
+                  <input
+                    class="form-control border-0 mt-1 p-0 reduced-date-input"
+                    name="departure"
+                    type="date"
+                    placeholder="Search here"
+                    required
+                    formControlName="fromDate"
+                    style="color: #007191"
+                    [attr.min]="minToDate"
+                    (change)="updateMinToDate()"
+                    [ngClass]="{
+                      'is-invalid':
+                        roundTripFormData.get('fromDate')?.invalid &&
+                        roundTripFormData.get('fromDate')?.touched
+                    }"
+                  />
+                </div>
+              </div>
+              <!-- Return Date -->
+              <div class="col-6 px-2">
+                <div class="date-info d-flex flex-column">
+                  <div class="d-flex align-items-center">
+                    <img
+                      class="me-2"
+                      style="width: 25px"
+                      src="../../../assets/icons/calender.svg"
+                    />
+                    <label for="from">Return</label>
+                  </div>
+                  <input
+                    class="form-control border-0 mt-1 p-0 reduced-date-input"
+                    name="return"
+                    type="date"
+                    formControlName="toDate"
+                    style="color: #007191"
+                    [attr.min]="minToDate"
+                    [ngClass]="{
+                      'is-invalid':
+                        roundTripFormData.get('toDate')?.invalid &&
+                        roundTripFormData.get('toDate')?.touched
+                    }"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Modify Search Button -->
+            <div
+              class="col-lg-2 col-md-12 text-md-end text-center mt-lg-0 mt-md-3 mt-3"
+            >
+              <button
+                type="button"
+                class="btn modify-search mb-2"
+                data-bs-toggle="collapse"
+                data-bs-target="#expandable-section"
+                aria-expanded="false"
+                aria-controls="expandable-section"
+              >
+                <img src="../../../assets/icons/Vector.svg" />
+                Show More
+              </button>
+            </div>
+          </div>
+
+          <!-- Expandable Section -->
+          <div class="collapse mt-4" id="expandable-section">
+            <div class="row align-items-center">
+              <div class="col-lg-4 col-12">
+                <label class="mb-2" for="passenger">Passengers</label>
+                <div class="dropdown" data-bs-auto-close="outside">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    id="passengerDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ getPassengerSummary() }}
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="passengerDropdown">
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Adult (12+ years)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('adult', $event)"
+                          [disabled]="passengerCounts.adult === 1"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.adult }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('adult', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Child (2-12 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('child', $event)"
+                          [disabled]="passengerCounts.child === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.child }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('child', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Infant (0-2 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('infant', $event)"
+                          [disabled]="passengerCounts.infant === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.infant }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('infant', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Special Fares and Routes Section -->
+            <div class="row mt-2 g-3">
+              <!-- Special Fares Section -->
+               <div class="col-lg-7 col-md-6">
+                  <label>Special fares</label>
+                  <div class="special d-flex flex-wrap gap-lg-4 gap-2 mt-2">
+                    <span *ngFor="let fare of specialFares" class="btn badge" [class.active]="isSpecialFareSelected(fare.id)"
+                      (click)="toggleSpecialFare(fare.id)">
+                      {{fare.label}}
+                    </span>
+                  </div>
+                </div>
+  
+              <!-- Routes Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="routes">Routes</label>
+                <select
+                  id="routes"
+                  class="form-select"
+                  formControlName="routes"
+                >
+                  <option value="Non Stop">Non Stop</option>
+                  <option value="1 Stop">1 Stop</option>
+                  <option value="2 Stop">2 Stop</option>
+                </select>
+              </div>
+
+              <!-- Choose Economy Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="economy">Class</label>
+                <select
+                  id="economy"
+                  class="form-select"
+                  formControlName="class"
+                >
+                  <option value="Economy">Economy</option>
+                  <option value="Premium Economy">Premium Economy</option>
+                  <option value="Business">Business</option>
+                  <option value="First Class">First Class</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row col-lg-2 col-md-4 mt-2">
+            <button
+              type="submit"
+              class="btn btn-continue"
+              [disabled]="isLoading || roundTripFormData.invalid">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <img
+                *ngIf="!isLoading"
+                src="../../../assets/icons/search.svg"
+                alt="Search Icon"
+                class="me-1"
+              />
+              {{ isLoading ? 'Searching...' : 'Search Flights' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Multi City Form -->
+    <div *ngIf="multiCityForm" class="container">
+      <!-- Flight Form -->
+      <form
+        [formGroup]="multiCityFormData"
+        (ngSubmit)="submitMultiCityFormData()"
+      >
+        <div class="multicity-container">
+          <!-- Flight Tabs -->
+          <div class="d-flex mb-2 flight-tabs justify-content-start">
+            <ng-container *ngFor="let leg of legs.controls; let i = index">
+              <div
+                class="flight-tab d-flex align-items-center gap-2"
+                [class.active]="activeFlightIndex === i"
+                (click)="setActiveFlight(i)"
+              >
+                <img
+                  src="../../../assets/svgs/flight-tab.svg"
+                  alt="Flight Icon"
+                  class="flight-icon"
+                />
+                <span>Flight {{ i + 1 }}</span>
+
+                <span
+                  *ngIf="legs.length > 1"
+                  class="remove-icon"
+                  (click)="removeLeg(i)"
+                >
+                  ✖
+                </span>
+              </div>
+            </ng-container>
+
+            <div
+              *ngIf="legs.length < 5"
+              class="flight-tab btn add-flight"
+              (click)="addLeg()"
+            >
+              Add Flight +
+            </div>
+          </div>
+
+          <div formArrayName="legs">
+            <ng-container *ngFor="let leg of legs.controls; let i = index">
+              <!-- Conditionally render form for active flight -->
+              <div
+                [formGroupName]="i"
+                class="flight-form"
+                *ngIf="activeFlightIndex === i"
+              >
+                <!-- From & To Airports -->
+                <div class="row mb-4 align-items-center">
+                  <div
+                    class="col-lg-6 d-flex flex-column flex-lg-row align-items-start mb-3 mb-sm-0"
+                  >
+                    <!-- Departure and Arrival Cities -->
+                    <div
+                      class="flight-route d-flex align-items-center justify-content-between mb-3 mb-lg-0"
+                    >
+                      <!-- Origin Airport -->
+                      <div class="d-flex align-items-center me-3">
+                        <img
+                          src="../../../assets/icons/la_plane-departure.svg"
+                          class="me-2"
+                          alt="Departure"
+                        />
+                        <ng-select
+                          [items]="listOfAirports"
+                          bindLabel="displayLabel"
+                          bindValue="iataCode"
+                          placeholder="Select Airport"
+                          [clearable]="false"
+                          formControlName="origin"
+                          [typeahead]="searchInput$"
+                          (search)="onSearch($event.term)"
+                          (change)="selectAirport2($event, 'origin')"
+                          [class.is-invalid]="
+                            leg.get('origin')?.invalid &&
+                            leg.get('origin')?.touched
+                          "
+                        >
+                          >
+                          <!-- Custom template for the selected item -->
+                          <ng-template ng-label-tmp let-item="item">
+                            <span
+                              >{{ item.iataCode }} -
+                              {{ item.airportCity }}</span
+                            >
+                          </ng-template>
+
+                          <!-- Custom template for the dropdown options -->
+                          <ng-template ng-option-tmp let-item="item">
+                            <div
+                              class="d-flex justify-content-between align-items-center"
+                            >
+                              <div>
+                                <span>{{ item.airportCity }}</span>
+                                (<span>{{ item.iataCode }}</span
+                                >)
+                                <br />
+                                <span style="font-size: 10px; color: gray">{{
+                                  item.airportName
+                                }}</span>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ng-select>
+                      </div>
+
+                      <!-- Arrow Icon -->
+                      <div
+                        class="d-flex align-items-center justify-content-center me-3 arrow-container"
+                      >
+                        <img
+                          src="assets/icons/form arrow.svg"
+                          alt="arrow"
+                          class="arrow-icon"
+                        />
+                      </div>
+
+                      <!-- Destination Airport -->
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="../../../assets/icons/la_plane-arrival.svg"
+                          class="me-2"
+                          alt="Arrival"
+                        />
+                        <ng-select
+                          [items]="listOfAirports"
+                          bindLabel="displayLabel"
+                          bindValue="iataCode"
+                          placeholder="Select Airport"
+                          [clearable]="false"
+                          formControlName="destination"
+                          [typeahead]="searchInput$"
+                          (search)="onSearch($event.term)"
+                          (change)="selectAirport2($event, 'destination')"
+                          [class.is-invalid]="
+                            leg.get('destination')?.invalid &&
+                            leg.get('destination')?.touched
+                          "
+                        >
+                          >
+                          <!-- Custom template for the selected item -->
+                          <ng-template ng-label-tmp let-item="item">
+                            <span
+                              >{{ item.iataCode }} -
+                              {{ item.airportCity }}</span
+                            >
+                          </ng-template>
+
+                          <!-- Custom template for the dropdown options -->
+                          <ng-template ng-option-tmp let-item="item">
+                            <div
+                              class="d-flex justify-content-between align-items-center"
+                            >
+                              <div>
+                                <span>{{ item.airportCity }}</span>
+                                (<span>{{ item.iataCode }}</span
+                                >)
+                                <br />
+                                <span style="font-size: 10px; color: gray">{{
+                                  item.airportName
+                                }}</span>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Date Information Section -->
+                  <div class="col-lg-4 col-md-12 d-flex flex-wrap mb-3 mb-sm-0">
+                    <!-- Departure Date -->
+                    <div class="col-6 px-2">
+                      <div class="date-info d-flex flex-column">
+                        <div class="d-flex align-items-center">
+                          <img
+                            class="me-2"
+                            style="width: 25px"
+                            src="../../../assets/icons/calender.svg"
+                          />
+                          <label for="from">Departure</label>
+                        </div>
+
+                        <!-- Input field for date -->
+                        <input
+                          class="form-control border-0 mt-1 p-0 reduced-date-input"
+                          type="date"
+                          placeholder="Search here"
+                          style="color: #007191"
+                          required
+                          formControlName="fromDate"
+                          [attr.min]="today"
+                          (change)="updateMinToDate()"
+                          [class.is-invalid]="
+                            leg.get('fromDate')?.invalid &&
+                            leg.get('fromDate')?.touched
+                          "
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Modify Search Button -->
+                  <div
+                    class="col-lg-2 col-md-12 text-md-end text-center mt-lg-0 mt-md-3 mt-3"
+                  >
+                    <button
+                      type="button"
+                      class="btn modify-search"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#expandable-section"
+                      aria-expanded="false"
+                      aria-controls="expandable-section"
+                    >
+                      <img src="../../../assets/icons/Vector.svg" />
+                      Show More
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <!-- Expandable Section -->
+          <div class="collapse mt-4" id="expandable-section">
+            <div class="row align-items-center">
+              <div class="col-lg-4 col-12">
+                <label class="mb-2" for="passenger">Passengers</label>
+                <div class="dropdown" data-bs-auto-close="outside">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    id="passengerDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ getPassengerSummary() }}
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="passengerDropdown">
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Adult (12+ years)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('adult', $event)"
+                          [disabled]="passengerCounts.adult === 1"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.adult }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('adult', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Child (2-12 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('child', $event)"
+                          [disabled]="passengerCounts.child === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.child }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('child', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between align-items-center px-3"
+                    >
+                      <span class="passenger-type">Infant (0-2 yrs)</span>
+                      <div class="d-flex align-items-center">
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="decrement('infant', $event)"
+                          [disabled]="passengerCounts.infant === 0"
+                        >
+                          -
+                        </button>
+                        <span class="mx-2">{{ passengerCounts.infant }}</span>
+                        <button
+                          class="btn border-0"
+                          type="button"
+                          (click)="increment('infant', $event)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Special Fares and Routes Section -->
+            <div class="row mt-2 g-3">
+              <!-- Special Fares Section -->
+              <div class="col-lg-7 col-md-6">
+                <label>Special fares</label>
+                <div class="special d-flex flex-wrap gap-lg-4 gap-2 mt-2">
+                  <span *ngFor="let fare of specialFares" class="btn badge" [class.active]="isSpecialFareSelected(fare.id)"
+                    (click)="toggleSpecialFare(fare.id)">
+                    {{fare.label}}
+                  </span>
+                </div>
+              </div>
+              <!-- Routes Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="routes">Routes</label>
+                <select
+                  id="routes"
+                  class="form-select"
+                  formControlName="routes"
+                >
+                  <option value="Non Stop">Non Stop</option>
+                  <option value="1 Stop">1 Stop</option>
+                  <option value="2 Stop">2 Stop</option>
+                </select>
+              </div>
+
+              <!-- Choose Economy Section -->
+              <div class="col-lg-2 col-md-3">
+                <label class="mb-2" for="economy">Class</label>
+                <select
+                  id="economy"
+                  class="form-select"
+                  formControlName="class"
+                >
+                  <option value="Economy">Economy</option>
+                  <option value="Premium Economy">Premium Economy</option>
+                  <option value="Business">Business</option>
+                  <option value="First Class">First Class</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row col-lg-2 col-md-4 mb-2">
+            <button
+              type="submit"
+              class="btn btn-continue"
+              [disabled]="isLoading || multiCityFormData.invalid">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <img
+                *ngIf="!isLoading"
+                src="../../../assets/icons/search.svg"
+                alt="Search Icon"
+                class="me-1"
+              />
+              {{ isLoading ? 'Searching...' : 'Search Flights' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

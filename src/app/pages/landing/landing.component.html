@@ -1,0 +1,514 @@
+<!-- hero section -->
+<!-- <section id="hero">
+  <div class="form">
+    <app-flight-booking></app-flight-booking>
+  </div>
+</section> -->
+<!--  -->
+<div class="form">
+  <!-- <app-flight-booking></app-flight-booking> -->
+  <app-search-form></app-search-form>
+</div>
+
+<!-- Flights to Choose Section -->
+<section id="flights-carousel" class="my-5">
+  <div class="container my-4">
+    <h6 class="my-2">Where do you want to go</h6>
+    <h1 class="my-2">Flights to choose</h1>
+  </div>
+
+  <div class="choose-flight container">
+    <div
+      id="carouselExampleControls"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="1500"
+    >
+      <div class="carousel-inner">
+        <!-- Carousel Item 1 -->
+        <div class="carousel-item active">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+              <!-- Card 1 -->
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/taj mahal.png" class="choose-flight-card-img-top" alt="Taj Mahal" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Taj Mahal</h2>
+                  <p class="choose flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Uttar Pradesh, India
+                  </p>
+                  <p class="choose flight card-text">230 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <!-- Card 2 -->
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/effil tower.png" class="choose-flight-card-img-top" alt="Effil Tower" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Effil Tower</h2>
+                  <p class="choose flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Paris, France
+                  </p>
+                  <p class="choose flight card-text">500 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <!-- Card 3 -->
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/goa.png" class="choose-flight-card-img-top" alt="Goa" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Goa</h2>
+                  <p class="choose flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Goa, India
+                  </p>
+                  <p class="choose flight card-text">2300 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <!-- Card 4 -->
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/castle.png" class="choose-flight-card-img-top" alt="Kajuru Castle" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Udaipur</h2>
+                  <p class="choose flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Rajasthan, India
+                  </p>
+                  <p class="choose flight card-text">450 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Add More Carousel Items (Grouped in Sets of 4) -->
+        <div class="carousel-item">
+          <div class="row">
+            <!-- Card 1 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/taj mahal.png" class="choose-flight-card-img-top" alt="Taj Mahal" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Taj Mahal</h2>
+                  <p class="choose-flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Uttar Pradesh, India
+                  </p>
+                  <p class="choose-flight card-text">230 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Card 2 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/taj mahal.png" class="choose-flight-card-img-top" alt="Taj Mahal" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Taj Mahal</h2>
+                  <p class="choose-flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Uttar Pradesh, India
+                  </p>
+                  <p class="choose-flight card-text">230 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Card 3 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/taj mahal.png" class="choose-flight-card-img-top" alt="Taj Mahal" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Taj Mahal</h2>
+                  <p class="choose-flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Uttar Pradesh, India
+                  </p>
+                  <p class="choose-flight card-text">230 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Card 4 -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="choose-flight card position-relative">
+                <img src="assets/images/taj mahal.png" class="choose-flight-card-img-top" alt="Taj Mahal" />
+                <div class="image-overlay"></div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end text-center text-white p-3">
+                  <h2 class="choose-flight-title mb-2">Taj Mahal</h2>
+                  <p class="choose-flight card-text mb-1">
+                    <img src="assets/svgs/India (IN).svg" alt="India" class="me-1" />
+                    Uttar Pradesh, India
+                  </p>
+                  <p class="choose-flight card-text">230 wants to travel here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>        
+      </div>
+
+      <!-- Carousel Controls -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- choose us card section -->
+<section id="choose-us" class="my-5">
+  <div class="p-4">
+  <div class="heading container mb-4">
+    <h6 class="my-2">Find out more insights</h6>
+    <h1 class="my-2">Why choose us?</h1>
+  </div>
+  <div class="choose container">
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="choose-us text-center p-4 shadow-sm h-100">
+          <img
+            src="assets/icons/airplane 1.png"
+            class="card-img-top mx-auto my-3"
+            alt="Easy Booking"
+            style="width: 80px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Easy Booking</h5>
+            <p class="card-text">We offer easy and convenient flight bookings with attractive offers.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-lg-3 col-md-6">
+        <div class="choose-us text-center p-4 shadow-sm h-100">
+          <img
+            src="assets/icons/special-tag 1.png"
+            class="card-img-top mx-auto my-3"
+            alt="Best Fare"
+            style="width: 80px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Best Fare</h5>
+            <p class="card-text">We ensure low rates on flight reservation, holiday packages, and on flight tickets.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-lg-3 col-md-6">
+        <div class="choose-us text-center p-4 shadow-sm h-100">
+          <img
+            src="assets/icons/special-tag 1.png"
+            class="card-img-top mx-auto my-3"
+            alt="Exciting Deals"
+            style="width: 80px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Exciting Deals</h5>
+            <p class="card-text">Discover amazing offers on flights and exciting deals.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-lg-3 col-md-6">
+        <div class="choose-us text-center p-4 shadow-sm h-100">
+          <img
+            src="assets/icons/special-tag 1.png"
+            class="card-img-top mx-auto my-3"
+            alt="24/7 Support"
+            style="width: 80px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">24/7 Support</h5>
+            <p class="card-text">Get assistance 24/7 on any kind of travel-related query. We are happy to assist you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>
+</section>
+<!-- top flight routes -->
+<section id="top-flight-routes" class="my-5">
+  <div class="container my-4">
+    <h6 class="my-2">Check out top routes</h6>
+    <h1 class="my-2">Top Flight Routes</h1>
+    <div class="row g-4 mt-2">
+      <!-- Flight Route 1 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/mumbai.svg"
+                  alt="Mumbai Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Mumbai Flights</h6>
+                <p class="card-text">To: Goa, Delhi, Bangalore, Ahmedabad</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Flight Route 2 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/delhi.svg"
+                  alt="Delhi Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Delhi Flights</h6>
+                <p class="card-text">To: Mumbai, Goa, Bangalore, Pune</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Flight Route 3 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/kolkata.svg"
+                  alt="Kolkata Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Kolkata Flights</h6>
+                <p class="card-text">To: Mumbai, Delhi, Bangalore, Bagdogra</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Flight Route 4 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/chennai.svg"
+                  alt="Chennai Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Chennai Flights</h6>
+                <p class="card-text">To: Mumbai, Delhi, Madurai, Coimbatore</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Flight Route 5 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/hyderabad.svg"
+                  alt="Hyderabad Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Hyderabad Flights</h6>
+                <p class="card-text">To: Mumbai, Goa, Bangalore, Delhi</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Flight Route 6 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="image-container">
+                <img
+                  src="assets/images/ahmedabad.svg"
+                  alt="Ahmedabad Flights"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+              <div>
+                <h6 class="card-title">Ahmedabad Flights</h6>
+                <p class="card-text">To: Mumbai, Delhi, Bangalore, Goa</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- avail offers -->
+<section id="offers" class="p-3">
+  <div class="container my-4">
+    <h6 class="my-2">Avail Offers*</h6>
+    <h1 class="my-2">Latest Offers</h1>
+  </div>
+
+  <div class="container my-3">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 p-2">
+        <div class="offer-card border">
+          <div class="offer-img"></div>
+          <div class="textBox">
+            <div class="textContent p-3">
+              <p>Domestic Flights</p>
+              <h5 class="">Huge savings on flights with KTT</h5>
+              <p class="span">Book domestic flights starting just $1459</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 p-2">
+        <div class="offer-card border">
+          <div class="offer-img"></div>
+          <div class="textBox">
+            <div class="textContent p-3">
+              <p>International Flights</p>
+              <h5>Huge savings on flights with KTT</h5>
+              <p class="span">Book domestic flights starting just $1459</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- travel blogs -->
+<section id="travel-blogs" class="my-5">
+  <div class="container my-4">
+    <h6 class="my-2">Find out more insights</h6>
+    <h1 class="my-2">Latest Blogs of Travel</h1>
+  </div>
+
+  <div class="container">
+    <div class="row d-flex justify-content-between g-3">
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+          <img
+            class="card-img-top"
+            src="assets/images/blog-1.png"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <span class="sub-text">Holiday Planning</span>
+            <span class="five-mins">5 mins read </span>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a class="card-link">Read More</a>
+            <span>
+              <img src="assets/icons/chevron-right.png" alt="" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+          <img
+            class="card-img-top"
+            src="assets/images/blog-2.png"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <span class="sub-text">Holiday Planning</span>
+            <span class="five-mins">5 mins read </span>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a class="card-link">Read More</a>
+            <span>
+              <img src="assets/icons/chevron-right.png" alt="" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+          <img
+            class="card-img-top"
+            src="assets/images/blog-3.png"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <span class="sub-text">Holiday Planning</span>
+            <span class="five-mins">5 mins read </span>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a class="card-link">Read More</a>
+            <span>
+              <img src="assets/icons/chevron-right.png" alt="" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="app-banner" class="">
+  <img width="100%" src="assets/images/mobile-app-banner.png" alt="" />
+</section>
+
+<section id="cta" class="">
+  <div>
+    <img width="100%" src="/assets/images/cta-take-flight.png" alt="" />
+  </div>
+</section>
+
+<!-- <p>landing works!</p> -->

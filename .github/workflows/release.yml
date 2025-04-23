@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main  # or your release branch
+
+permissions:
+  contents: write  # allow pushing tags, creating releases
+  issues: write    # optional, allow creating issues when release fails
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # or whatever you're using
+
+      - name: Install dependencies
+        working-directory: Rentte/Rentte-aws-lambda
+        run: npm ci
+
+      - name: Semantic Release
+        working-directory: Rentte/Rentte-aws-lambda
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

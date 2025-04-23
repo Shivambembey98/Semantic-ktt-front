@@ -1,0 +1,1606 @@
+<div class="body-page px-3">
+  <div class="container-fluid">
+    <app-modify-search [isLoading]="isLoading" (isLoadingChange)="isLoading = $event">
+    </app-modify-search>
+
+    <!-- Filter Toggle for Mobile -->
+    <div class="d-block d-md-none mb-3">
+      <button class="btn filter w-100" type="button" data-bs-toggle="collapse" data-bs-target="#filterSection"
+        aria-expanded="false" aria-controls="filterSection">
+        Filter
+      </button>
+    </div>
+    <div class="row g-2">
+      <!-- Filter Section -->
+      <div class="col-md-3 col-12">
+        <div class="collapse d-md-block" id="filterSection">
+          <div class="filter-card card h-100">
+            <div class="filter-card card-body">
+              <form>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5>Filter</h5>
+                  <input type="reset" class="reset btn" (click)="resetFilters()" />
+                </div>
+
+                <!-- Price Range -->
+                <div class="mb-3 price-slider-container">
+                  <label for="customRange1" class="form-label">Price</label>
+                  <div class="position-relative">
+                    <!-- Current price tooltip -->
+                    <div class="price-tooltip" [style.left]="((currentPrice - minPrice) / (maxPrice - minPrice) * 100) + '%'">
+                      ₹{{currentPrice}}
+                    </div>
+                    <input 
+                      type="range" 
+                      id="customRange1" 
+                      class="form-range" 
+                      [min]="minPrice" 
+                      [max]="maxPrice"
+                      [(ngModel)]="currentPrice" 
+                      name="priceRange" 
+                      (input)="onPriceSliderChange()"
+                    />
+                    <div class="d-flex justify-content-between">
+                      <span>₹{{minPrice}}</span>
+                      <span>₹{{maxPrice}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Departure Time -->
+                <div class="departure mb-2">
+                  <div class="mb-2">
+                    <span>Departure Time</span>
+                    <h6>From Bengaluru</h6>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 mb-3" *ngFor="let button of timeFrames; let i = index">
+                      <button type="button"
+                        class="btn filter-time-btn w-100 d-flex flex-column align-items-center border-0"
+                        [ngClass]="{ selected: selectedDepartureIndex === i }" (click)="selectDepartureButton(i)">
+                        <span class="time-frame">{{ button.name }}</span>
+                        <span class="time-period">{{ button.timePeriod }}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Arrival Time Filter -->
+                <div class="arrival mb-2">
+                  <div class="mb-2">
+                    <span>Arrival Time</span>
+                    <h6>To Delhi</h6>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 mb-3" *ngFor="let button of timeFrames; let i = index">
+                      <button type="button"
+                        class="btn filter-time-btn w-100 d-flex flex-column align-items-center border-0"
+                        [ngClass]="{ selected: selectedArrivalIndex === i }" (click)="selectArrivalButton(i)">
+                        <span class="time-frame">{{ button.name }}</span>
+                        <span class="time-period">{{ button.timePeriod }}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Transit -->
+                <div>
+                  <h5>Transit</h5>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="transitOptions" id="nonStop" value="nonStop"
+                      [(ngModel)]="transitFilter" (change)="onTransitFilterChange()">
+                    <label class="form-check-label" for="nonStop">
+                      Non-Stop
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="transitOptions" id="oneStop" value="oneStop"
+                      [(ngModel)]="transitFilter" (change)="onTransitFilterChange()" checked>
+                    <label class="form-check-label" for="oneStop">
+                      1 Stop
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="transitOptions" id="twoStop" value="twoStop"
+                      [(ngModel)]="transitFilter" (change)="onTransitFilterChange()">
+                    <label class="form-check-label" for="twoStop">
+                      2 Stops
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flights List -->
+      <div class="col-md-9">
+        <!-- Common Loader -->
+        <div *ngIf="isLoading" class="row g-3">
+          <div class="loader-container">
+            <img class="loader" src="../../../assets/icons/loader.gif" alt="Loading..." />
+          </div>
+        </div>
+
+        <!-- No Flights Found State - Common for all types -->
+        <div *ngIf="!isLoading && showNoFlightsMessage" class="row g-3">
+          <div class="col-12 text-center">
+            <div class="card p-5">
+              <h3 class="mt-4">No Flights Available</h3>
+              <p class="text-muted">No flights match your current filter criteria.</p>
+              <button class="btn btn-primary mt-3" (click)="resetFilters()">
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- One Way Flights -->
+        <div class="row g-3" *ngIf="!isLoading && !showNoFlightsMessage && formType === 'one-way'">
+          <div class="col-md-12 col-sm-12" *ngFor="let e of filteredCardData; let i = index">
+            <!-- direct flight  -->
+            <!-- One-Way Flight Card (Direct Flights) -->
+            <div class="card flight-card" *ngIf="e.type === 'direct'">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="col-8 g-4">
+                    <div class="d-flex align-items-center gap-4">
+                      <div>
+                        <p class="fw-bold mb-0">{{ departureAirport.airportCity }}</p>
+                        <p class="mb-0">{{ e.departure_time }}</p>
+                      </div>
+                      <div class="text-center">
+                        <img src="../../../assets/svgs/take -off.svg" alt="Flight" class="arrow-card default-image" />
+                        <p style="font-size: 12px; margin: 0">
+                          <span>
+                            {{
+                            calculateDuration(
+                            e.departure_time,
+                            e.arrival_time,
+                            e.departure_day,
+                            e.arrival_day
+                            ).split("+1")[0]
+                            }}
+                          </span>
+                          <span *ngIf="
+                              calculateDuration(
+                                e.departure_time,
+                                e.arrival_time,
+                                e.departure_day,
+                                e.arrival_day
+                              ).includes('+1')
+                            " style="color: red; font-weight: bold">
+                            +1
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <p class="fw-bold mb-0">{{ arrivalAirport.airportCity }}</p>
+                        <p class="mb-0">{{ e.arrival_time }}</p>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2 flex-md-row">
+                      <div class="flight-brand">
+                        <img src = 'assets/flight-logo/{{e.airline}}.png'
+                        class="airline-logo"
+                        style="height: 30px; width: auto;"/> {{ e.airline }} - <small>{{ e.flightNumber }}</small>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <p class="mb-0" style="font-size: 12px">
+                          Direct Flights
+                        </p>
+                      </div>
+                      <div class="class-card">
+                        <p class="mb-0">Class: Economy {{ e.class }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-center text-center">
+                    <h5 class="mb-2">₹{{ e.formattedPrice }}</h5>
+                    <button class="btn book-one-way" [routerLink]="['/flight-details']" (click)="bookFlight(e)">
+                      Book Flight
+                    </button>
+                    <button class="mt-3 border-0 bg-white detail-btn" (click)="toggleDetails(i, e)">
+                      Details
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Expandable Section -->
+                <div [class.show]="expandedIndices[i] === 0" class="expandable-section">
+                  <div class="flight-details">
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                      <div class="btn-group tab-toggle mb-2" role="group">
+                        <button class="btn small-btn" [ngClass]="{
+                            'details-toggle': selectedTab === 'flight',
+                            'btn-light': selectedTab !== 'flight'
+                          }" (click)="selectedTab = 'flight'">
+                          Flight Details
+                        </button>
+
+                        <button class="btn small-btn" [ngClass]="{
+                            'details-toggle': selectedTab === 'fare',
+                            'btn-light': selectedTab !== 'fare'
+                          }" (click)="selectedTab = 'fare'">
+                          Fare Summary
+                        </button>
+                      </div>
+                      <div class="seats-left">{{ e.seatsLeft }} seats left</div>
+                    </div>
+                    <div *ngIf="selectedTab === 'flight'">
+                      <!-- <h6>{{ e.departure }} to {{ e.arrival }}</h6> -->
+                      <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div>{{ e.airline }}</div>
+                        <p class="text-danger"> {{ e.refundability || 'Loading...' }}</p>
+                        <div>
+                          <span>Travel Class : <b>Economy</b></span>
+                        </div>
+                      </div>
+
+                      <div
+                        class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ e.departure }}</span>
+                            <span>{{ e.departure_time }}</span>
+                            <span>{{ e.departure_day }}</span>
+                            <span>{{ departureAirport.airportName }}</span>
+                            <span>Terminal - {{ e.originTerminal }}</span>
+                          </div>
+                          <div>
+                            <img src="../../../assets/svgs/sum-route.svg" alt="" />
+                          </div>
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ e.arrival }}</span>
+                            <span>{{ e.arrival_time }}</span>
+                            <span>{{ e.arrival_day }}</span>
+                            <span>{{ arrivalAirport.airportName }}</span>
+                            <span>Terminal - {{ e.destinationTerminal }}</span>
+                          </div>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Total Baggage</span>
+                            <span class="details-response">
+                              {{ getTotalPiecesAllowed(e.baggageChecked, e.baggageCarryOn) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Check-in</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(e.baggageChecked) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Cabin</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(e.baggageCarryOn) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="selectedTab === 'fare'">
+                      <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between">
+                          <h6>TOTAL</h6>
+                          <span class="fs-4">₹{{ e.formattedPrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Base Fare</span>
+                          <span>{{ e.basePrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Surcharges</span>
+                          <span>{{ e.taxes }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- connecting card  -->
+            <div class="card" *ngIf="e.type === 'connecting'">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="col-8 g-4">
+                    <div class="d-flex align-items-center gap-4">
+                      <div>
+                        <span class="fw-bold mb-0">{{ getAirportByIata(e.departure)?.airportCity }}</span>
+                        <p class="mb-0">{{ e.departure_time }}</p>
+                      </div>
+                      <div class="text-center">
+                        <img src="../../../assets/svgs/take -off.svg" alt="Flight" class="arrow-card default-image" />
+                        <p style="font-size: 12px; margin: 0">
+                          <span>
+                            {{
+                            calculateDuration(
+                            e.departure_time,
+                            e.arrival_time,
+                            e.departure_day,
+                            e.arrival_day
+                            ).split("+1")[0]
+                            }}
+                          </span>
+                          <span *ngIf="
+                              calculateDuration(
+                                e.departure_time,
+                                e.arrival_time,
+                                e.departure_day,
+                                e.arrival_day
+                              ).includes('+1')
+                            " style="color: red; font-weight: bold">
+                            +1
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <span class="fw-bold mb-0">{{ getAirportByIata(e.arrival)?.airportCity }}</span>
+                        <p class="mb-0">{{ e.arrival_time }}</p>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex justify-content-between mt-2 flex-md-row"
+                    >
+                    <div class="flight-brand">
+                    <img src = 'assets/flight-logo/{{e.airline}}.png'
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        {{ e.airline }} - <small>{{ e.flightNumber }}</small>
+                      </div>
+                      <div class="tooltip-container">
+                        <p class="mb-0 me-3" style="font-size: 12px">1 stop</p>
+                        <span class="tooltip-text">
+                          Plane change<br />
+                          {{ getLayoverText(e.layovers) }}
+                        </span>
+                      </div>
+                      <div class="class-card">
+                        <p class="mb-0">Class: Economy</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-center text-center">
+                    <h5 class="mb-2">₹{{ e.formattedPrice }}</h5>
+                    <button class="btn book-one-way" [routerLink]="['/flight-details']" (click)="bookFlight(e)">
+                      Book Flight
+                    </button> <button class="mt-3 border-0 bg-white detail-btn" (click)="toggleDetails(i, e)">
+                      Details
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Expandable Section -->
+                <div [class.show]="expandedIndices[i] === 0" class="expandable-section">
+                  <div class="flight-details">
+                    <hr />
+
+                    <!-- Loop through each leg inside the flights array -->
+                    <div class="btn-group tab-toggle mb-2" role="group">
+                      <button class="btn small-btn" [ngClass]="{
+                          'details-toggle': selectedTab === 'flight',
+                          'btn-light': selectedTab !== 'flight'
+                        }" (click)="selectedTab = 'flight'">
+                        Flight Details
+                      </button>
+
+                      <button class="btn small-btn" [ngClass]="{
+                          'details-toggle': selectedTab === 'fare',
+                          'btn-light': selectedTab !== 'fare'
+                        }" (click)="selectedTab = 'fare'">
+                        Fare Summary
+                      </button>
+                    </div>
+                    <div *ngFor="let flight of e.flights; let legIndex = index">
+                      <div *ngIf="selectedTab === 'flight'">
+                        <div class="d-flex flex-column flex-md-row justify-content-between">
+                          <div>Flight Time: {{ flight.flightTime }} mins</div>
+                          <p class="text-danger"> {{ e.refundability || 'Loading...' }}</p>
+                          <div>
+                            <span>Equipment: {{ flight.equipment }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Seats Left (Positioned Above Baggage Section) -->
+                        <span class="text-end seats-left">
+                          {{ flight.seatsLeft }} Seats Left
+                        </span>
+                        <div
+                          class="my-2 d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                          <div class="d-flex flex-column flex-md-row gap-md-3 align-items-center">
+                            <!-- Departure Details -->
+                            <div class="d-flex flex-column details-text">
+                              <span>{{ getAirportByIata(flight.origin)?.airportCity }}</span>
+                              <span>{{
+                                flight.departureTime | date : "shortTime"
+                                }}</span>
+                              <span>{{
+                                flight.departureTime | date : "EEE MMM d yyyy"
+                                }}</span>
+                              <span>{{ getAirportByIata(flight.origin)?.airportName }}</span>
+                              <span>Terminal - {{ flight.originTerminal }}</span>
+                            </div>
+                            <div>
+                              <img src="../../../assets/svgs/sum-route.svg" alt="" />
+                            </div>
+                            <!-- Arrival Details -->
+                            <div class="d-flex flex-column details-text">
+                              <span>{{ getAirportByIata(flight.destination)?.airportCity }}</span>
+                              <span>{{
+                                flight.arrivalTime | date : "shortTime"
+                                }}</span>
+                              <span>{{
+                                flight.arrivalTime | date : "EEE MMM d yyyy"
+                                }}</span>
+                              <span>{{ getAirportByIata(flight.destination)?.airportName }}</span>
+                              <span>Terminal -
+                                {{ flight.destinationTerminal }}</span>
+                            </div>
+                          </div>
+                          <!-- Baggage Information -->
+                          <div>
+                            <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                              <div class="d-flex flex-column">
+                                <span class="details-text">Total Baggage</span>
+                                <span class="details-response">
+                                  {{ getTotalPiecesAllowed(e.baggageChecked, e.baggageCarryOn) }}
+                                </span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <span class="details-text">Check-in</span>
+                                <span class="details-response">
+                                  {{ getFormattedBaggageDetail(e.baggageChecked) }}
+                                </span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <span class="details-text">Cabin</span>
+                                <span class="details-response">
+                                  {{ getFormattedBaggageDetail(e.baggageCarryOn) }}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Show Layover for All Legs Except Last One -->
+                        <div *ngIf="legIndex < e.flights.length - 1" class="layover">
+                          <p class="text-muted">
+                            Layover at {{ e.flights[legIndex + 1].origin }} for
+                            {{ e.layovers[e.flights[legIndex].destination] }}
+                            mins
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="selectedTab === 'fare'">
+                      <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between">
+                          <h6>TOTAL</h6>
+                          <span class="fs-4">₹{{ e.formattedPrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Base Fare</span>
+                          <span>{{ e.basePrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Surcharges</span>
+                          <span>{{ e.taxes }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Round trip flight cards -->
+        <div class="row g-3" *ngIf="!isLoading && !showNoFlightsMessage && formType === 'round-trip'">
+          <!-- Top Toggle Buttons -->
+          <div class="mb-2">
+            <button class="col-6 toggle-roundtrip-cards btn" [class.selected]="selectedTrip === 'departure'"
+              (click)="selectedTrip = 'departure'">
+              {{ cardData[0]?.departure || "N/A" }} -
+              {{ cardData[0]?.arrival || "N/A" }}
+              <br />
+              {{ cardData[0]?.departure_day || "N/A" }}
+            </button>
+
+            <button class="col-6 toggle-roundtrip-cards btn" [class.selected]="selectedTrip === 'return'"
+              (click)="selectedTrip = 'return'">
+              {{ cardData[0]?.arrival || "N/A" }} -
+              {{ cardData[0]?.departure || "N/A" }}
+              <br />
+              {{ cardData[0]?.return_day || "N/A" }}
+            </button>
+          </div>
+          <div *ngIf="isLoading" class="row g-3">
+            <div class="loader-container">
+              <img class="loader" src="../../../assets/icons/loader.gif" alt="Loading..." />
+            </div>
+          </div>
+
+          <!-- Flights Section -->
+          <div class="row mx-0 gx-0 mt-2">
+            <!-- ✅ Onward Journey Flights (DEL → DXB) on Left Side -->
+            <div class="col-lg-6 col-md-12 col-sm-12 px-1 mb-3 flight-column" [ngClass]="{
+                'active-sm': selectedTrip === 'departure',
+                'inactive-lg': selectedTrip === 'return'
+              }">
+              <!-- Inside Onward Flights Column -->
+              <div *ngIf="!isLoading && showNoOnwardFlightsMessage" class="card p-5 text-center">
+                <h3 class="mt-4">No Onward Flights Available</h3>
+                <button class="btn btn-primary mt-3" (click)="resetFilters()">Reset Filters</button>
+              </div>
+
+
+              <!-- Direct Flights -->
+              <div *ngFor="
+                  let e of filteredOnwardFlights?.length ? filteredOnwardFlights : [];
+                  let i = index
+                " class="card mb-3">
+                <ng-container *ngIf="e.type === 'direct'; else connectingTemplate">
+                  <!-- DIRECT FLIGHT -->
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex align-items-center gap-2">
+                        <img src = 'assets/flight-logo/{{e.airline}}.png'
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        <p class="fw-bold mb-0">{{ e.airline }}</p>
+                      </div>
+                      <span class="text-danger">{{ e.seatsLeft }} seats left</span>
+                    </div>
+
+                    <div class="mb-2">
+                      <span>Class: {{ e.class }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex col-9 gap-4">
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.departure }}</p>
+                          <p class="mb-0">{{ e.departure_time }}</p>
+                        </div>
+                        <div style="text-align: center">
+                          <p style="font-size: 10px" class="m-0">
+                            Direct flight
+                          </p>
+                          <img [src]="e.flight_img" alt="Flight" style="height: 25px" />
+                          <p style="font-size: 12px; margin: 0">
+                            <span>
+                              {{
+                              calculateDuration(
+                              e.departure_time,
+                              e.arrival_time,
+                              e.departure_day,
+                              e.arrival_day
+                              ).split("+1")[0]
+                              }}
+                            </span>
+                            <span *ngIf="
+                                calculateDuration(
+                                  e.departure_time,
+                                  e.arrival_time,
+                                  e.departure_day,
+                                  e.arrival_day
+                                ).includes('+1')
+                              " style="color: red; font-weight: bold">
+                              +1
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.arrival }}</p>
+                          <p class="mb-0">{{ e.arrival_time }}</p>
+                        </div>
+                      </div>
+                      <h5 class="round-trip-price col-3">
+                        ₹{{ e.formattedPrice }}
+                      </h5>
+                    </div>
+                  </div>
+
+                  <div>
+                    <button class="select w-100" [class.selected]="e.isSelected"
+                      (click)="toggleSelectRoundTrip(i, 'departure')">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                  </div>
+                </ng-container>
+
+                <!-- CONNECTING FLIGHT TEMPLATE -->
+                <ng-template #connectingTemplate>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex align-items-center gap-2">
+                        <img src= 'assets/flight-logo/{{e.airline}}.png' 
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;" />
+                        <p class="mb-0">{{ e.airline }}</p>
+                      </div>
+                      <span class="text-danger">{{ e.seatsLeft }} seats left</span>
+                    </div>
+
+                    <div class="mb-2">
+                      <span>Class: {{ e.class }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex col-9 gap-4">
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.departure }}</p>
+                          <p class="mb-0">{{ e.departure_time }}</p>
+                        </div>
+                        <div style="text-align: center">
+                          <div class="tooltip-container d-block">
+                            <p class="mb-0" style="font-size: 10px">1 stop</p>
+                            <span class="tooltip-text">
+                              Plane change<br />
+                              {{ getLayoverText(e.layovers) }}
+                            </span>
+                          </div>
+                          <img [src]="e.flight_img" alt="Flight" style="height: 25px" />
+                          <p style="font-size: 12px; margin: 0">
+                            <span>
+                              {{
+                              calculateDuration(
+                              e.departure_time,
+                              e.arrival_time,
+                              e.departure_day,
+                              e.arrival_day
+                              ).split("+1")[0]
+                              }}
+                            </span>
+                            <span *ngIf="
+                                calculateDuration(
+                                  e.departure_time,
+                                  e.arrival_time,
+                                  e.departure_day,
+                                  e.arrival_day
+                                ).includes('+1')
+                              " style="color: red; font-weight: bold">
+                              +1
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.arrival }}</p>
+                          <p class="mb-0">{{ e.arrival_time }}</p>
+                        </div>
+                      </div>
+                      <h5 class="round-trip-price col-3">
+                        ₹{{ e.formattedPrice }}
+                      </h5>
+                    </div>
+                  </div>
+
+                  <div>
+                    <button class="select w-100" [class.selected]="e.isSelected"
+                      (click)="toggleSelectRoundTrip(i, 'departure')">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+              <!-- Connecting Flights -->
+            </div>
+
+            <!-- ✅ Return Journey Flights (BOM → DEL) -->
+            <div class="col-lg-6 col-md-12 col-sm-12 px-1 mb-3 flight-column" [ngClass]="{
+                'active-sm': selectedTrip === 'return',
+                'inactive-lg': selectedTrip === 'departure'
+              }">
+              <!-- Inside Return Flights Column -->
+              <div *ngIf="!isLoading && showNoReturnFlightsMessage" class="card p-5 text-center">
+                <h3 class="mt-4">No Return Flights Available</h3>
+                <button class="btn btn-primary mt-3" (click)="resetFilters()">Reset Filters</button>
+              </div>
+
+              <div *ngFor="
+                  let e of filteredReturnFlights?.length ? filteredReturnFlights : [];
+                  let i = index
+                " class="card mb-3">
+                <ng-container *ngIf="e.type === 'direct-return'; else connectingTemplate">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex align-items-center gap-2">
+                        <img src= 'assets/flight-logo/{{e.airline}}.png' 
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        <p class="fw-bold mb-0">{{ e.airline }}</p>
+                      </div>
+                      <span class="text-danger">{{ e.seatsLeft }} seats left</span>
+                    </div>
+                    <div class="mb-2">
+                      <span>Class: {{ e.class }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex col-9 gap-4">
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.departure }}</p>
+                          <p class="mb-0">{{ e.departure_time }}</p>
+                        </div>
+                        <div style="text-align: center">
+                          <p style="font-size: 10px" class="m-0">
+                            Direct Flight
+                          </p>
+                          <img src="{{ e.flight_img }}" alt="Flight" style="height: 25px" />
+                          <p style="font-size: 12px; margin: 0">
+                            <span>
+                              {{
+                              calculateDuration(
+                              e.departure_time,
+                              e.arrival_time,
+                              e.departure_day,
+                              e.arrival_day
+                              ).split("+1")[0]
+                              }}
+                            </span>
+                            <span *ngIf="
+                                calculateDuration(
+                                  e.departure_time,
+                                  e.arrival_time,
+                                  e.departure_day,
+                                  e.arrival_day
+                                ).includes('+1')
+                              " style="color: red; font-weight: bold">
+                              +1
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.arrival }}</p>
+                          <p class="mb-0">{{ e.arrival_time }}</p>
+                        </div>
+                      </div>
+                      <h5 class="round-trip-price col-3">
+                        ₹{{ e.formattedPrice }}
+                      </h5>
+                    </div>
+                  </div>
+                  <div>
+                    <button class="select w-100" [class.selected]="e.isSelected"
+                      (click)="toggleSelectRoundTrip(i, 'return')">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                  </div>
+                </ng-container>
+
+                <!-- CONNECTING FLIGHT TEMPLATE -->
+                <ng-template #connectingTemplate>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex align-items-center gap-2">
+                        <img src= 'assets/flight-logo/{{e.airline}}.png'
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        <p class="fw-bold mb-0">{{ e.airline }}</p>
+                      </div>
+                      <span class="text-danger">{{ e.seatsLeft }} seats left</span>
+                    </div>
+
+                    <div class="mb-2">
+                      <span>Class: {{ e.class }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex col-9 gap-4">
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.departure }}</p>
+                          <p class="mb-0">{{ e.departure_time }}</p>
+                        </div>
+                        <div style="text-align: center">
+                          <div class="tooltip-container d-block">
+                            <p class="mb-0" style="font-size: 10px">1 stop</p>
+                            <span class="tooltip-text">
+                              Plane change<br />
+                              {{ getLayoverText(e.layovers) }}
+                            </span>
+                          </div>
+                          <img [src]="e.flight_img" alt="Flight" style="height: 25px" />
+                          <p style="font-size: 12px; margin: 0">
+                            <span>
+                              {{
+                              calculateDuration(
+                              e.departure_time,
+                              e.arrival_time,
+                              e.departure_day,
+                              e.arrival_day
+                              ).split("+1")[0]
+                              }}
+                            </span>
+                            <span *ngIf="
+                                calculateDuration(
+                                  e.departure_time,
+                                  e.arrival_time,
+                                  e.departure_day,
+                                  e.arrival_day
+                                ).includes('+1')
+                              " style="color: red; font-weight: bold">
+                              +1
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p class="fw-bold mb-2">{{ e.arrival }}</p>
+                          <p class="mb-0">{{ e.arrival_time }}</p>
+                        </div>
+                      </div>
+                      <h5 class="round-trip-price col-3">
+                        ₹{{ e.formattedPrice }}
+                      </h5>
+                    </div>
+                  </div>
+
+                  <div>
+                    <button class="select w-100" [class.selected]="e.isSelected"
+                      (click)="toggleSelectRoundTrip(i, 'return')">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Background Blur Overlay -->
+        <div *ngIf="expanded" class="overlay roundtrip-overlay" (click)="closeExpandedSection()"></div>
+        <!-- Selected Round Trip Flight Details Section -->
+        <div *ngIf="selectedRoundTripFlights.length > 0"
+          class="row col-lg-8 col-md-8 col-sm-10 g-3 mb-2 fixed-bottom-center">
+          <div class="selected-flight-details">
+            <div class="card selected-container">
+              <div class="custom-close-btn d-flex align-items-center justify-content-around"
+                (click)="clearSelectedFlights()">
+                ✖
+              </div>
+              <!-- Flex container for selected flight cards -->
+              <div class="d-flex flex-wrap justify-content-between p-2">
+                <div class="col-12 col-md-8 d-flex flex-wrap gap-4">
+                  <!-- Flight Cards -->
+                  <div class="card col-md-4 selected-flight-card" *ngFor="let flight of selectedRoundTripFlights">
+                    <div class="card-body text-white" *ngIf="flight">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <p class="fw-bold mb-0">{{ flight?.departure }}</p>
+                        <p class="mb-0">{{ flight?.departure_time }}</p>
+                      </div>
+
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <p class="fw-bold mb-0">{{ flight?.arrival }}</p>
+                        <p class="mb-0">{{ flight?.arrival_time }}</p>
+                      </div>
+
+                      <div>
+                        <h6 class="mb-0">₹{{ flight?.formattedPrice }}</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fixed Price and Button Section -->
+                <div class="col-12 col-md-3 mt-2 d-flex flex-md-column flex-sm-row justify-content-around">
+                  <h4 class="d-flex flex-column align-items-center text-white">
+                    ₹{{ getTotalSelectedRoundTripPrice() }}
+                  </h4>
+                  <div class="d-flex flex-column align-items-center">
+                    <button class="btn d-flex align-items-center book-flight mb-2" routerLink="/flight-details"
+                      (click)="bookFlight(selectedRoundTripFlights)">
+                      Continue
+                      <img src="../../../assets/icons/arrow-right.svg" alt="icon" style="margin-left: 8px" />
+                    </button>
+                    <!-- Toggle Details Button -->
+                    <button class="text-white flight-details-text btn" (click)="toggleSelectedCardsDetails()">
+                      Flight Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expandable Section -->
+            <div [class.show]="expanded" class="expandable-selected-round-trip-section bg-light p-3">
+              <div class="flight-details" *ngIf="selectedRoundTripFlights?.length" (click)="$event.stopPropagation()">
+                <div *ngFor="let flight of selectedRoundTripFlights">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="fw-semibold">
+                        {{ flight?.departure }} to {{ flight?.arrival }}
+                      </h6>
+                    </div>
+                    <div>
+                      <h6>{{ flight?.airline }} - {{ flight?.flightNumber }}</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column flex-md-row justify-content-between">
+                    <div>{{ flight?.airlines }}</div>
+                    <p class="text-danger"> {{ flight?.refundability || 'Loading...' }}</p>
+                    <div>
+                      <span>Travel Class: <b>Economy</b></span>
+                    </div>
+                  </div>
+
+                  <!-- If flight is connecting, iterate over its flights array -->
+                  <ng-container *ngIf="
+                      flight?.type.includes('connecting');
+                      else directFlight
+                    ">
+                    <div *ngFor="let segment of flight.flights; let i = index">
+                      <div
+                        class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                        <div class="d-flex flex-column details-text">
+                          <span>{{ segment.origin }}</span>
+                          <span>{{
+                            segment.departureTime | date : "shortTime"
+                            }}</span>
+                          <span>{{ flight.departure_day }}</span>
+                          <span>Terminal - {{ segment.originTerminal }}</span>
+                        </div>
+
+                        <div class="d-flex flex-column align-items-center">
+                          <span style="font-size: 12px">
+                            {{
+                            i < flight.flights.length - 1 ? "Layover: " + flight.layovers[segment.destination] + " min"
+                              : "" }} </span>
+                              <img src="../../../assets/svgs/sum-route.svg" alt="Route Icon" />
+                        </div>
+
+                        <div class="d-flex flex-column details-text">
+                          <span>{{ segment.destination }}</span>
+                          <span>{{
+                            segment.arrivalTime | date : "shortTime"
+                            }}</span>
+                          <span>{{ flight.arrival_day }}</span>
+                          <span>Terminal - {{ segment.destinationTerminal }}</span>
+                        </div>
+
+                        <!-- Baggage Details (Inside Blue Card) -->
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Total Baggage</span>
+                            <span class="details-response">
+                              {{ getTotalPiecesAllowed(flight?.baggageChecked, flight?.baggageCarryOn) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Check-in</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(flight?.baggageChecked) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Cabin</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(flight?.baggageCarryOn) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="text-danger text-center" style="font-size: 12px">
+                        {{
+                        i < flight.flights.length - 1 ? "Layover: " + flight.layovers[segment.destination] + " min" : ""
+                          }} </span>
+                    </div>
+                  </ng-container>
+
+                  <!-- Direct Flight Section -->
+                  <ng-template #directFlight>
+                    <div
+                      class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                      <div class="d-flex flex-column details-text">
+                        <span>{{ flight?.departure }}</span>
+                        <span>{{ flight?.departure_time }}</span>
+                        <span>{{ flight?.departure_day }}</span>
+                        <span>Terminal - {{ flight?.originTerminal }}</span>
+                      </div>
+
+                      <div class="d-flex flex-column align-items-center">
+                        <span style="font-size: 12px">{{
+                          getLayoverText(flight?.layovers)
+                          }}</span>
+                        <img src="../../../assets/svgs/sum-route.svg" alt="Route Icon" />
+                      </div>
+
+                      <div class="d-flex flex-column details-text">
+                        <span>{{ flight?.arrival }}</span>
+                        <span>{{ flight?.arrival_time }}</span>
+                        <span>{{ flight?.arrival_day }}</span>
+                        <span>Terminal - {{ flight?.destinationTerminal }}</span>
+                      </div>
+
+                      <!-- Baggage Details (Inside Blue Card) -->
+                      <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                        <div class="d-flex flex-column">
+                          <span class="details-text">Total Baggage</span>
+                          <span class="details-response">
+                            {{ getTotalPiecesAllowed(flight?.baggageChecked, flight?.baggageCarryOn) }}
+                          </span>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <span class="details-text">Check-in</span>
+                          <span class="details-response">
+                            {{ getFormattedBaggageDetail(flight?.baggageChecked) }}
+                          </span>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <span class="details-text">Cabin</span>
+                          <span class="details-response">
+                            {{ getFormattedBaggageDetail(flight?.baggageCarryOn) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi city flight cards -->
+        <div class="row g-3" *ngIf="!isLoading && formType === 'multi-city'">
+          <div class="multicity-cards-toggle d-flex justify-content-between">
+            <button *ngFor="let leg of filteredCardData; let i = index" class="toggle-multicity-cards btn flex-fill"
+              [class.selected]="selectedLeg === i" (click)="selectedLeg = i">
+              {{ leg.departure }} - {{ leg.arrival }}
+              <br />
+              {{ leg.departure_day | date : "dd MMM YYYY" }}
+            </button>
+          </div>
+          <div *ngIf="!isLoading && showNoFlightsMessagePerLeg[selectedLeg]" class="card p-5 text-center">
+            <h3 class="mt-4">No Flights Available for {{ filteredCardData[selectedLeg]?.departure }} → {{
+              filteredCardData[selectedLeg]?.arrival }}</h3>
+            <p class="text-muted">No flights found for this leg based on current filters.</p>
+            <button class="btn btn-primary mt-3" (click)="resetFilters()">Reset Filters</button>
+          </div>
+
+
+          <div class="col-md-12 col-sm-12"
+            *ngFor="let e of filteredCardData[selectedLeg]?.filteredFlights; let i = index">
+            <div class="card" *ngIf="e.type === 'direct'">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="col-8 g-4">
+                    <div class="d-flex align-items-center gap-4">
+                      <div>
+                        <p class="fw-bold mb-0">{{ e.departure }}</p>
+                        <p class="mb-0">{{ e.departure_time }}</p>
+                      </div>
+                      <div class="text-center">
+                        <img src="../../../assets/svgs/take -off.svg" alt="Flight" class="arrow-card default-image" />
+                        <p style="font-size: 12px; margin: 0">
+                          <span>
+                            {{
+                            calculateDuration(
+                            e.departure_time,
+                            e.arrival_time,
+                            e.departure_day,
+                            e.arrival_day
+                            ).split("+1")[0]
+                            }}
+                          </span>
+                          <span *ngIf="
+                              calculateDuration(
+                                e.departure_time,
+                                e.arrival_time,
+                                e.departure_day,
+                                e.arrival_day
+                              ).includes('+1')
+                            " style="color: red; font-weight: bold">
+                            +1
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <p class="fw-bold mb-0">{{ e.arrival }}</p>
+                        <p class="mb-0">{{ e.arrival_time }}</p>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2 flex-md-row">
+                      <div class="flight-brand">
+                      <img src = 'assets/flight-logo/{{e.airline}}.png'
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        {{ e.airline }} - <small>{{ e.flightNumber }}</small>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <p class="mb-0" style="font-size: 12px">
+                          Direct Flights
+                        </p>
+                      </div>
+                      <div class="class-card">
+                        <p class="mb-0">Class: Economy {{ e.class }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-center text-center">
+                    <h5 class="mb-2">₹{{ e.formattedPrice }}</h5>
+                    <button class="select btn" [class.selected]="e.isSelected" (click)="toggleSelectMultiCity(i)">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                    <button class="mt-3 border-0 bg-white detail-btn" (click)="toggleDetails(selectedLeg, e, i)">
+                      Details
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Expandable Section -->
+                <div [class.show]="expandedIndices[selectedLeg] === i" class="expandable-section">
+                  <div class="flight-details">
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                      <div class="btn-group tab-toggle mb-2" role="group">
+                        <button class="btn small-btn" [ngClass]="{
+                            'details-toggle': selectedTab === 'flight',
+                            'btn-light': selectedTab !== 'flight'
+                          }" (click)="selectedTab = 'flight'">
+                          Flight Details
+                        </button>
+
+                        <button class="btn small-btn" [ngClass]="{
+                            'details-toggle': selectedTab === 'fare',
+                            'btn-light': selectedTab !== 'fare'
+                          }" (click)="selectedTab = 'fare'">
+                          Fare Summary
+                        </button>
+                      </div>
+                      <div class="seats-left">{{ e.seatsLeft }} seats left</div>
+                    </div>
+                    <div *ngIf="selectedTab === 'flight'">
+                      <h6>{{ e.departure }} to {{ e.arrival }}</h6>
+                      <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div>{{ e.airline }}</div>
+                        <p class="text-danger"> {{ e.refundability || 'Loading...' }}</p>
+                        <div>
+                          <span>Travel Class : <b>Economy</b></span>
+                        </div>
+                      </div>
+
+                      <div
+                        class="my-2 d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ e.departure }}</span>
+                            <span>{{ e.departure_time }}</span>
+                            <span>{{ e.departure_day }}</span>
+                            <span>Bengaluru, Karnataka, India</span>
+                            <span>Terminal - {{ e.originTerminal }}</span>
+                          </div>
+                          <div>
+                            <img src="../../../assets/svgs/sum-route.svg" alt="" />
+                          </div>
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ e.arrival }}</span>
+                            <span>{{ e.arrival_time }}</span>
+                            <span>{{ e.arrival_day }}</span>
+                            <span>Bengaluru, Karnataka, India</span>
+                            <span>Terminal - {{ e.destinationTerminal }}</span>
+                          </div>
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Total Baggage</span>
+                            <span class="details-response">
+                              {{ getTotalPiecesAllowed(e.baggageChecked, e.baggageCarryOn) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Check-in</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(e.baggageChecked) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Cabin</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(e.baggageCarryOn) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="selectedTab === 'fare'">
+                      <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between">
+                          <h6>TOTAL</h6>
+                          <span class="fs-4">₹{{ e.formattedPrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Base Fare</span>
+                          <span>{{ e.basePrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Surcharges</span>
+                          <span>{{ e.taxes }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" *ngIf="e.type === 'connecting'">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="col-8 g-4">
+                    <div class="d-flex align-items-center gap-4">
+                      <div>
+                        <p class="fw-bold mb-0">{{ getAirportByIata(e.departure)?.airportCity }}</p>
+                        <p class="mb-0">{{ e.departure_time }}</p>
+                      </div>
+                      <div class="text-center">
+                        <img src="../../../assets/svgs/take -off.svg" alt="Flight" class="arrow-card default-image" />
+                        <p style="font-size: 12px; margin: 0">
+                          <span>
+                            {{
+                            calculateDuration(
+                            e.departure_time,
+                            e.arrival_time,
+                            e.departure_day,
+                            e.arrival_day
+                            ).split("+1")[0]
+                            }}
+                          </span>
+                          <span *ngIf="
+                              calculateDuration(
+                                e.departure_time,
+                                e.arrival_time,
+                                e.departure_day,
+                                e.arrival_day
+                              ).includes('+1')
+                            " style="color: red; font-weight: bold">
+                            +1
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <p class="fw-bold mb-0">{{ getAirportByIata(e.arrival)?.airportCity }}</p>
+                        <p class="mb-0">{{ e.arrival_time }}</p>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2 flex-md-row">
+                      <div class="flight-brand">
+                      <img src = 'assets/flight-logo/{{e.airline}}.png'
+                             [alt]="e.airline" 
+                             class="airline-logo"
+                             style="height: 30px; width: auto;"/>
+                        {{ e.airline }} - <small>{{ e.flightNumber }}</small>
+                      </div>
+                      <div class="tooltip-container d-block">
+                        <p class="mb-0" style="font-size: 12px">1 stop</p>
+                        <span class="tooltip-text">
+                          Plane change<br />
+                          {{ getLayoverText(e.layovers) }}
+                        </span>
+                      </div>
+                      <div class="class-card">
+                        <p class="mb-0">Class: Economy {{ e.class }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 d-flex flex-column align-items-center text-center">
+                    <h5 class="mb-2">₹{{ e.formattedPrice }}</h5>
+                    <button class="select btn" [class.selected]="e.isSelected" (click)="toggleSelectMultiCity(i)">
+                      {{ e.isSelected ? "SELECTED" : "SELECT" }}
+                    </button>
+                    <button class="mt-3 border-0 bg-white detail-btn" (click)="toggleDetails(selectedLeg, e, i)">
+                      Details
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Expandable Section -->
+                <div [class.show]="expandedIndices[selectedLeg] === i" class="expandable-section">
+                  <div class="flight-details">
+                    <hr />
+
+                    <!-- Loop through each leg inside the flights array -->
+                    <div class="btn-group tab-toggle mb-2" role="group">
+                      <button class="btn small-btn" [ngClass]="{
+                          'details-toggle': selectedTab === 'flight',
+                          'btn-light': selectedTab !== 'flight'
+                        }" (click)="selectedTab = 'flight'">
+                        Flight Details
+                      </button>
+
+                      <button class="btn small-btn" [ngClass]="{
+                          'details-toggle': selectedTab === 'fare',
+                          'btn-light': selectedTab !== 'fare'
+                        }" (click)="selectedTab = 'fare'">
+                        Fare Summary
+                      </button>
+                    </div>
+                    <div *ngFor="let flight of e.flights; let legIndex = index">
+                      <div *ngIf="selectedTab === 'flight'">
+                        <div class="d-flex flex-column flex-md-row justify-content-between">
+                          <div>Flight Time: {{ flight.flightTime }} mins</div>
+                          <p class="text-danger"> {{ e.refundability || 'Loading...' }}</p>
+                          <div>
+                            <span>Equipment: {{ flight.equipment }}</span>
+                          </div>
+                        </div>
+                        <div class="text-end seats-left">
+                          {{ flight.seatsLeft }} seats left
+                        </div>
+                        <div
+                          class="my-2 d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                            <!-- Departure Details -->
+                            <div class="d-flex flex-column details-text">
+                              <span>{{ getAirportByIata(flight.origin)?.airportCity }}</span>
+                              <span>{{
+                                flight.departureTime | date : "shortTime"
+                                }}</span>
+                              <span>{{
+                                flight.departureTime | date : "EEE MMM d yyyy"
+                                }}</span>
+                              <span>{{ getAirportByIata(flight.origin)?.airportName }}</span>
+                              <span>Terminal - {{ flight.originTerminal }}</span>
+                            </div>
+                            <div>
+                              <img src="../../../assets/svgs/sum-route.svg" alt="" />
+                            </div>
+                            <!-- Arrival Details -->
+                            <div class="d-flex flex-column details-text">
+                              <span>{{ getAirportByIata(flight.destination)?.airportCity }}</span>
+                              <span>{{
+                                flight.arrivalTime | date : "shortTime"
+                                }}</span>
+                              <span>{{
+                                flight.arrivalTime | date : "EEE MMM d yyyy"
+                                }}</span>
+                              <span>{{ getAirportByIata(flight.destination)?.airportName }}</span>
+                              <span>Terminal -
+                                {{ flight.destinationTerminal }}</span>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Total Baggage</span>
+                              <span class="details-response">
+                                {{ getTotalPiecesAllowed(e.baggageChecked, e.baggageCarryOn) }}
+                              </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Check-in</span>
+                              <span class="details-response">
+                                {{ getFormattedBaggageDetail(e.baggageChecked) }}
+                              </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Cabin</span>
+                              <span class="details-response">
+                                {{ getFormattedBaggageDetail(e.baggageCarryOn) }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Show Layover for All Legs Except Last One -->
+                        <div *ngIf="legIndex < e.flights.length - 1" class="layover">
+                          <p class="text-muted">
+                            Layover at {{ e.flights[legIndex + 1].origin }} for
+                            {{ e.layovers[e.flights[legIndex].destination] }}
+                            mins
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="selectedTab === 'fare'">
+                      <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between">
+                          <h6>TOTAL</h6>
+                          <span class="fs-4">₹{{ e.formattedPrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Base Fare</span>
+                          <span>{{ e.basePrice }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted">
+                          <span>Surcharges</span>
+                          <span>{{ e.taxes }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Background Blur Overlay -->
+        <div *ngIf="isSelectedMultiCityDetailsExpanded" class="overlay multicity-overlay"
+          (click)="closeisSelectedMultiCityDetailsExpandedSection()"></div>
+        <!-- Selected Multi City Flight Details Section -->
+        <div *ngIf="selectedMultiCityFlights.length > 0"
+          class="row col-lg-8 col-md-8 col-sm-10 g-3 mb-2 fixed-bottom-center">
+          <div class="selected-flight-details">
+            <div class="card">
+              <div class="custom-close-btn d-flex align-items-center justify-content-around"
+                (click)="clearSelectedFlights()">
+                ✖
+              </div>
+              <div class="card-body d-flex px-3 selected-container flex-wrap gap-3 justify-content-start">
+                <div class="card selected-flight-card flex-grow-1" *ngFor="let flight of selectedMultiCityFlights">
+                  <div class="card-body text-white">
+                    <div>
+                      <img src="../../../assets/images/indigo.svg" alt="" class="img-logo-flight mb-1" />
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <p class="fw-bold mb-0">{{ flight.departure }}</p>
+                      <p class="mb-0">{{ flight.departure_time }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <p class="fw-bold mb-0">{{ flight.arrival }}</p>
+                      <p class="mb-0">{{ flight.arrival_time }}</p>
+                    </div>
+                    <div>
+                      <h6 class="mb-0">₹{{ flight.formattedPrice }}</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Flight summary section -->
+                <div class="mt-2 text-center flex-shrink-0">
+                  <h4 class="text-white">
+                    ₹{{ totalSelectedMulticityFlightPrice }}
+                  </h4>
+                  <div class="d-flex flex-column align-items-center">
+                    <button class="btn book-flight mb-2">
+                      Book Flight
+                      <img src="../../../assets/icons/arrow-right.svg" alt="icon" style="margin-left: 8px" />
+                    </button>
+                    <button class="text-white flight-details-text btn" (click)="toggleSelectedCardsDetails()">
+                      Flight Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Expanded Section -->
+              <div [class.show]="expanded" class="multicity-flight-details-expanded">
+                <div *ngFor="let flight of selectedMultiCityFlights" class="card border-0 p-2 mb-2">
+                  <div>
+                    <h6 class="fw-semibold">
+                      {{ flight.departure }} to {{ flight.arrival }}
+                    </h6>
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
+                      <div>{{ flight.airline }}</div>
+                      <p class="text-danger"> {{ flight.refundability || 'Loading...' }}</p>
+                      <div>
+                        <span>Travel Class: <b>Economy</b></span>
+                      </div>
+                    </div>
+
+                    <!-- Connecting Flight Handling -->
+                    <ng-container *ngIf="
+                        flight?.type.includes('connecting');
+                        else directMultiCityFlight
+                      ">
+                      <div *ngFor="let segment of flight.flights; let i = index">
+                        <div
+                          class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ segment.origin }}</span>
+                            <span>{{
+                              segment.departureTime | date : "shortTime"
+                              }}</span>
+                            <span>{{ flight.departure_day }}</span>
+                            <span>Terminal - {{ segment.originTerminal }}</span>
+                          </div>
+
+                          <div class="d-flex flex-column align-items-center">
+                            <img src="../../../assets/svgs/sum-route.svg" alt="Route Icon" />
+                          </div>
+
+                          <div class="d-flex flex-column details-text">
+                            <span>{{ segment.destination }}</span>
+                            <span>{{
+                              segment.arrivalTime | date : "shortTime"
+                              }}</span>
+                            <span>{{ flight.arrival_day }}</span>
+                            <span>Terminal -
+                              {{ segment.destinationTerminal }}</span>
+                          </div>
+
+                          <!-- Baggage Details (Inside Blue Card) -->
+                          <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Total Baggage</span>
+                              <span class="details-response">
+                                {{ getTotalPiecesAllowed(flight.baggageChecked, flight.baggageCarryOn) }}
+                              </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Check-in</span>
+                              <span class="details-response">
+                                {{ getFormattedBaggageDetail(flight.baggageChecked) }}
+                              </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <span class="details-text">Cabin</span>
+                              <span class="details-response">
+                                {{ getFormattedBaggageDetail(flight.baggageCarryOn) }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <span class="text-danger text-center" style="font-size: 12px">
+                          {{
+                          i < flight.flights.length - 1 ? "Layover: " + flight.layovers[segment.destination] + " min"
+                            : "" }} </span>
+                      </div>
+                    </ng-container>
+
+                    <!-- Direct Flight Section -->
+                    <ng-template #directMultiCityFlight>
+                      <div
+                        class="my-2 d-flex flex-column flex-md-row align-items-center justify-content-between p-3 blue-card">
+                        <div class="d-flex flex-column details-text">
+                          <span>{{ flight.departure }}</span>
+                          <span>{{ flight.departure_time }}</span>
+                          <span>{{ flight.departure_day }}</span>
+                          <span>Terminal - {{ flight.originTerminal }}</span>
+                        </div>
+
+                        <div class="d-flex flex-column align-items-center">
+                          <span style="font-size: 12px">{{
+                            getLayoverText(flight?.layovers)
+                            }}</span>
+                          <img src="../../../assets/svgs/sum-route.svg" alt="Route Icon" />
+                        </div>
+
+                        <div class="d-flex flex-column details-text">
+                          <span>{{ flight.arrival }}</span>
+                          <span>{{ flight.arrival_time }}</span>
+                          <span>{{ flight.arrival_day }}</span>
+                          <span>Terminal - {{ flight.destinationTerminal }}</span>
+                        </div>
+
+                        <!-- Baggage Details -->
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Total Baggage</span>
+                            <span class="details-response">
+                              {{ getTotalPiecesAllowed(flight.baggageChecked, flight.baggageCarryOn) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Check-in</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(flight.baggageChecked) }}
+                            </span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <span class="details-text">Cabin</span>
+                            <span class="details-response">
+                              {{ getFormattedBaggageDetail(flight.baggageCarryOn) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

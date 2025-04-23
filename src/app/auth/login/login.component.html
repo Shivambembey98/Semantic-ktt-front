@@ -1,0 +1,224 @@
+<div class="container my-1 d-flex justify-content-center">
+  <div class="main">
+    <div class="row card">
+      <div class="card-body">
+        <h5 class="heading text-center">Login!</h5>
+        <hr class="mb-2" />
+        <div class="container-fluid my-3">
+          <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+              <input
+                type="button"
+                class="btn"
+                aria-current="page"
+                [class.active]="activeTab === 'EmailLogin'"
+                value="Email"
+                (click)="toggleEmailLogin()"
+              />
+            </li>
+            <li class="nav-item">
+              <input
+                type="button"
+                class="btn"
+                aria-current="page"
+                [class.active]="activeTab === 'MobileLogin'"
+                value="Mobile"
+                (click)="toggleMobileLogin()"
+              />
+            </li>
+          </ul>
+        </div>
+
+        <!-- Login form with email and password -->
+        <div *ngIf="isEmailLogin" class="container my-4">
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="login-container">
+              <div class="row mb-3">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    formControlName="login"
+                    type="text"
+                    placeholder="Enter your username"
+                    required
+                    [ngClass]="{'is-invalid': loginForm.get('login').invalid && loginForm.get('login').touched}"
+                  />
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <img src="assets/svgs/user.svg" alt="" />
+                    </span>
+                  </div>
+                </div>
+                <div *ngIf="loginForm.get('login').invalid && loginForm.get('login').touched" class="text-danger small">
+                  Username is required.
+                </div>
+              </div>
+              
+              <div class="row mb-1">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    formControlName="password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    placeholder="Enter your password"
+                    required
+                    [ngClass]="{'is-invalid': loginForm.get('password').invalid && loginForm.get('password').touched}"
+                  />
+                  <div class="input-group-append" style="cursor: pointer" (click)="togglePassword()">
+                    <span class="input-group-text">
+                      <img *ngIf="showPassword" src="assets/svgs/view.svg" alt="" />
+                      <img *ngIf="!showPassword" src="assets/svgs/view-off.svg" alt="" />
+                    </span>
+                  </div>
+                </div>
+                <div *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched" class="text-danger small">
+                  Password is required.
+                </div>
+              </div>              
+
+              <div class="mb-3 text-end">
+                <a routerLink="/forgot-password" style="font-size: 13px"
+                  >Forget Password?</a
+                >
+              </div>
+
+              <div class="mb-3">
+                <button style="width: 100%" type="submit" class="btn loginBtn">
+                  Login
+                </button>
+              </div>
+
+              <div class="row text-center mb-4">
+                <span style="font-size: 12px"
+                  >Don't have an account?
+                  <a routerlink="/register">Register here!</a></span
+                >
+              </div>
+
+              <div class="d-flex text-center px-3">
+                <span style="font-size: 10px">
+                  By proceeding, you agree to KwikTravelTrip
+                  <a class="links-text">Privacy Policy</a>,
+                  <a class="links-text">User Agreement</a> and
+                  <a class="links-text">T&Cs</a>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Login form with mobile and otp -->
+        <div *ngIf="isMobileLogin" class="container my-4">
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="login-container">
+              <div class="row mb-3">
+                <div class="col-lg-12 d-flex">
+                  <ngx-intl-tel-input
+                    class="w-100"
+                    [preferredCountries]="[CountryISO.UnitedStates, CountryISO.India]"
+                    [enableAutoCountrySelect]="false"
+                    [enablePlaceholder]="true"
+                    [searchCountryFlag]="true"
+                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                    [selectFirstCountry]="false"
+                    [selectedCountryISO]="CountryISO.India"
+                    [maxLength]="15"
+                    [phoneValidation]="true"
+                    formControlName="mobileNo"
+                    [ngClass]="{'is-invalid': loginForm.get('mobileNo').invalid && loginForm.get('mobileNo').touched}"
+                  ></ngx-intl-tel-input>
+                  <span class="input-group-text">
+                    <img
+                      src="assets/svgs/phone.svg"
+                      alt=""
+                      style="width: 23px; height: auto"
+                    />
+                  </span>
+                </div>
+                <div *ngIf="loginForm.get('mobileNo').invalid && loginForm.get('mobileNo').touched" class="text-danger small">
+                  Mobile number is required.
+                </div>
+              </div>
+              
+
+              <div class="mb-3">
+                <button
+                  style="width: 100%"
+                  type="button"
+                  class="btn loginBtn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#verifyOtpModal"
+                >
+                  Send OTP
+                </button>
+              </div>
+
+              <div class="row text-center mb-3">
+                <span style="font-size: 12px"
+                  >Don't have an account?
+                  <a routerlink="/register">Register here!</a></span
+                >
+              </div>
+
+              <div class="d-flex text-center px-3">
+                <span style="font-size: 10px">
+                  By proceeding, you agree to KwikTravelTrip
+                  <a class="links-text">Privacy Policy</a>,
+                  <a class="links-text">User Agreement</a> and
+                  <a class="links-text">T&Cs</a>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="verifyOtpModal"
+  tabindex="-1"
+  aria-labelledby="verifyOtpModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="verifyOtpModalLabel">Verfiy OTP</h5>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="mb-4">
+            <div>
+              <h6>OTP</h6>
+            </div>
+
+            <form>
+              <div class="login-container">
+                <div class="row mb-4">
+                  <input
+                    class="form-control"
+                    type="number"
+                    placeholder="Enter your OTP"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-start">
+        <button type="button" class="btn loginBtn" data-bs-dismiss="modal">
+          Verify OTP
+        </button>
+        <button type="button" class="btn loginBtn" data-bs-dismiss="modal">
+          Resend OTP
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-common-alert [message]="modalMessage"></app-common-alert>
+

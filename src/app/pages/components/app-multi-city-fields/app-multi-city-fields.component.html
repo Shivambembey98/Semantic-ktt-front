@@ -1,0 +1,249 @@
+<div *ngIf="multiCityForm" class="container">
+  <form [formGroup]="formGroup" (ngSubmit)="submitMultiCityFormData()">
+    <div class="multicity-container">
+      <!-- Flight Tabs -->
+      <div class="d-flex mb-2 flight-tabs align-items-center">
+        <ng-container *ngFor="let leg of legs.controls; let i = index">
+          <div
+            class="flight-tab"
+            [class.active]="activeFlightIndex === i"
+            (click)="setActiveFlightIndex(i)"
+          >
+            FLIGHT {{ i + 1 }}
+            <span
+              *ngIf="legs.length > 1"
+              class="remove-icon"
+              (click)="$event.stopPropagation(); removeLeg(i)"
+              >✖</span
+            >
+          </div>
+        </ng-container>
+
+        <!-- Add Flight Button -->
+        <div
+          *ngIf="legs.length < 5"
+          class="flight-tab btn add-flight"
+          (click)="addLeg()"
+        >
+          Add Flight +
+        </div>
+      </div>
+
+      <!-- Flight Forms -->
+      <div formArrayName="legs">
+        <ng-container *ngFor="let leg of legs.controls; let i = index">
+          <div
+            [formGroupName]="i"
+            class="flight-form"
+            [class.d-none]="activeFlightIndex !== i"
+          >
+            <div class="row mb-3">
+              <div class="col-md-5">
+                <label for="origin">From</label>
+                <ng-select
+                  [items]="listOfAirports"
+                  bindLabel="displayLabel"
+                  bindValue="iataCode"
+                  placeholder="Select Airport"
+                  formControlName="origin"
+                  [clearable]="false"
+                  (change)="selectAirport2($event, 'origin')"
+                  [typeahead]="searchInput$"
+                >
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div>
+                        <span>{{ item.airportCity }}</span> (<span>{{
+                          item.iataCode
+                        }}</span
+                        >)<br />
+                        <span class="text-muted small">{{
+                          item.airportName
+                        }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <div
+                  class="text-danger small"
+                  *ngIf="
+                    leg.get('origin')?.invalid && leg.get('origin')?.touched
+                  "
+                >
+                  Origin is required
+                </div>
+              </div>
+              <!-- Swap Icon -->
+              <div class="col-md-2 text-center mt-4">
+                <img
+                  src="assets/icons/form arrow.svg"
+                  alt="arrow"
+                  class="arrow-icon"
+                  (click)="swapAirports.emit()"
+                />
+              </div>
+
+              <div class="col-md-5">
+                <label for="destination">To</label>
+                <ng-select
+                  [items]="listOfAirports"
+                  bindLabel="displayLabel"
+                  bindValue="iataCode"
+                  placeholder="Select Airport"
+                  formControlName="destination"
+                  [clearable]="false"
+                  (change)="selectAirport2($event, 'destination')"
+                  [typeahead]="searchInput$"
+                >
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div>
+                        <span>{{ item.airportCity }}</span> (<span>{{
+                          item.iataCode
+                        }}</span
+                        >)<br />
+                        <span class="text-muted small">{{
+                          item.airportName
+                        }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <div
+                  class="text-danger small"
+                  *ngIf="
+                    leg.get('destination')?.invalid &&
+                    leg.get('destination')?.touched
+                  "
+                >
+                  Destination is required
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-5">
+                <label for="departure">Departure</label>
+                <input
+                  class="form-control"
+                  type="date"
+                  placeholder="Select Date"
+                  required
+                  formControlName="fromDate"
+                  [attr.min]="today"
+                  (change)="updateMinToDate()"
+                  [class.is-invalid]="
+                    leg.get('fromDate')?.invalid && leg.get('fromDate')?.touched
+                  "
+                />
+                <div
+                  class="text-danger small"
+                  *ngIf="
+                    leg.get('fromDate')?.invalid && leg.get('fromDate')?.touched
+                  "
+                >
+                  Date is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Passenger Controls -->
+      <div class="row mb-4">
+        <div class="passenger-input col-md-4">
+          <label class="passenger-label"
+            >Adult<span class="age-info"> (12+ Yrs)</span></label
+          >
+          <ngx-slider
+            [value]="formGroup.get('adults')?.value"
+            [options]="adultOptions"
+            formControlName="adults"
+          ></ngx-slider>
+        </div>
+
+        <div class="passenger-input col-md-4">
+          <label class="passenger-label"
+            >Child <span class="age-info">(2-12 Yrs)</span></label
+          >
+          <ngx-slider
+            [value]="formGroup.get('children')?.value"
+            [options]="childOptions"
+            formControlName="children"
+          ></ngx-slider>
+        </div>
+
+        <div class="passenger-input col-md-4">
+          <label class="passenger-label"
+            >Infants <span class="age-info"> (0-2 Yrs)</span></label
+          >
+          <ngx-slider
+            [value]="formGroup.get('infants')?.value"
+            [options]="infantOptions"
+            formControlName="infants"
+          ></ngx-slider>
+        </div>
+      </div>
+
+      <!-- Special Fares -->
+      <div class="row mb-4">
+        <label>Special fares</label>
+        <div class="special d-flex justify-content-between mt-2">
+          <span
+            *ngFor="let fare of specialFares"
+            class="btn badge"
+            [class.active]="isSpecialFareSelected(fare.id)"
+            (click)="toggleSpecialFare(fare.id)"
+          >
+            {{ fare.label }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Routes and Class -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="routes">Routes</label>
+          <select formControlName="routes" class="form-select">
+            <option value="Non Stop">Non Stop</option>
+            <option value="1 Stop">1 Stop</option>
+            <option value="2 Stop">2 Stop</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="economy">Class</label>
+          <select formControlName="class" class="form-select">
+            <option value="Economy">Economy</option>
+            <option value="Premium Economy">Premium Economy</option>
+            <option value="Business">Business</option>
+            <option value="First Class">First Class</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="row mb-2">
+        <button type="submit" class="btn btn-continue">
+          <img
+            src="../../../assets/icons/search.svg"
+            alt="Search Icon"
+            class="me-1"
+          />
+          Search Flights
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

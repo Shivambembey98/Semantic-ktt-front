@@ -1,0 +1,52 @@
+<div class="container my-1 d-flex justify-content-center py-4">
+  <div class="main">
+    <div class="row card" style="width: 400px;">
+      <div class="card-body">
+        <div class="position-relative text-center mb-3">
+          <button class="btn p-0 position-absolute start-0" routerLink="/sign-up">
+            <img src="../../../assets/icons/arrow-right.svg" alt="" style="transform: rotate(180deg); width: 20px;">
+          </button>
+          <h5 class="heading mb-0">Verify Email</h5>
+        </div>        
+        
+        <p class="text-center">Sent a OTP on your registered email</p>
+        <hr class="mb-4" />
+
+        <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+          <div class="form-group mb-3">
+            <label for="otp" class="form-label">Verify OTP</label>
+            <input
+              type="number"
+              class="form-control"
+              id="otp"
+              formControlName="otp"
+              placeholder="Enter OTP"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn text-white continue-btn w-100 mb-2"
+            [disabled]="otpForm.invalid"
+          >
+            Continue
+          </button>
+          <button class="btn border-0 w-100 mb-2" [disabled]="isResendDisabled" (click)="resendOtp()">
+            Resend OTP {{ countdown > 0 ? '(' + countdown + 's)' : '' }}
+          </button>                   
+        </form>
+
+        <div class="d-flex text-center px-3">
+          <span style="font-size: 10px">
+            By proceeding, you agree to KwikTravelTrip
+            <a class="links-text">Privacy Policy</a>,
+            <a class="links-text">User Agreement</a> and
+            <a class="links-text">T&Cs</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-common-alert [message]="modalMessage"></app-common-alert>

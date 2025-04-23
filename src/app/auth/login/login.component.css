@@ -1,0 +1,45 @@
+.loginBtn {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.main {
+  background: white;
+  border-radius: 6px;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 450px;
+}
+.heading {
+  /* font-size: 18px; */
+  font-family: var(--poppins);
+}
+.links-text{
+  color: #007191;
+}
+.active {
+  background-color: var(--primary) !important;
+  color: var(--white) !important;
+}
+input[type="button"]:focus {
+  background-color: var(--primary);
+  color: white;
+}
+.input-group-text{
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+}
+::ng-deep .iti__country-list {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+::ng-deep .iti {
+  width: 100% !important;
+}
+::ng-deep .iti__tel-input {
+  width: 100% !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+

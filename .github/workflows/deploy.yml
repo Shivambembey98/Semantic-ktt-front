@@ -1,0 +1,95 @@
+name: Deploy KTT app on EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into EC2 and install required dependencies + clone project
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            sudo yum update -y
+            sudo yum install -y docker git
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo usermod -aG docker $USER
+            sudo chmod 666 /var/run/docker.sock
+
+            # Clone or update the project repo
+            git config --global --add safe.directory /home/${{ secrets.EC2_USER }}/KTT-frontend
+            if [ -d "KTT-frontend" ]; then
+              cd KTT-frontend
+              git config pull.rebase false
+              git checkout develop
+              git fetch origin develop
+              git reset --hard origin/develop
+            else
+              git clone -b develop https://${{ secrets.PAT_GITHUB }}@github.com/KwikTravelTrip/KTT-frontend.git
+              cd KTT-frontend
+            fi
+
+            # Install Node.js and build tools
+            sudo yum install -y nodejs npm
+            sudo yum groupinstall "Development Tools" -y
+            sudo yum install -y gcc-c++ make python3
+
+            # Clean install
+            cd /home/${{ secrets.EC2_USER }}/KTT-frontend
+            sudo rm -rf node_modules
+            npm install @ng-select/ng-select@13.2.0
+            npm i @rollup/rollup-linux-x64-gnu --save-dev --legacy-peer-deps
+            npm install --legacy-peer-deps
+
+  test:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: SSH into EC2 and run Lint Check
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            cd KTT-frontend
+            npm run lint || true
+            npm run lint:fix || true
+
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: SSH into EC2 and clone or update repository
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            cd KTT-frontend
+            docker stop ktt || true
+            docker rm ktt || true
+            docker rmi ktt || true
+            docker build -t ktt .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: SSH into EC2 and deploy container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            docker run -d -p 4200:80 --name ktt ktt

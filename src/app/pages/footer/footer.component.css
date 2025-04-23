@@ -1,0 +1,30 @@
+a {
+    text-decoration: none;
+    color: grey;
+}
+#footer {
+    background-color: #F5F5F5;
+}
+a:hover {
+    text-decoration: underline;
+    color: var(--primary);
+} 
+ul {
+    line-height: 35px;
+}
+#footer > #social-links {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+}
+
+#footer > #quick-links {
+    width: 70%;
+}
+.links h5{
+    color: var(--primary);
+}
+.links-subtext{
+    font-size: 12px;
+    line-height: normal;
+}

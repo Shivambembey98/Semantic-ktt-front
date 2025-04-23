@@ -1,0 +1,624 @@
+.body-page {
+  background-color: #f3f7fc;
+}
+.no-of-flights {
+  background-color: var(--light);
+}
+.book-flight {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.seats-left{
+  color: #EE6336;
+}
+.expandable-section {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, transform 0.4s ease-in-out;
+}
+.custom-close-btn {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  height: 18px;
+  width: 18px;
+  background-color: rgb(221, 62, 62);
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.expandable-section.show {
+  max-height: 500px; /* Adjust based on content */
+  opacity: 1;
+  transform: translateY(0);
+}
+/* roundtrip expandable  */
+.expandable-selected-round-trip-section {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, transform 0.4s ease-in-out;
+}
+
+.expandable-selected-round-trip-section.show {
+  max-height: 400px; /* Adjust based on content */
+  opacity: 1;
+  transform: translateY(0);
+  overflow: auto; /* Enables scrolling */
+}
+
+/* Ensure smooth scrolling inside */
+.expandable-selected-round-trip-section.show::-webkit-scrollbar {
+  width: 6px;
+}
+
+.expandable-selected-round-trip-section.show::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+.expandable-selected-round-trip-section.show::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.blue-card {
+  background-color: #e6f5fc;
+}
+.details-text{
+  font-size: 12px;
+}
+.details-response{
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--primary);;
+}
+.toggle-roundtrip-cards{
+  background-color: white;
+  color: #000;
+  border-radius: 0%;
+}
+.selected {
+  background-color: #248BA8;
+  color: white;
+}
+.round-trip-price{
+  font-weight: 500;
+}
+.arrow-card.default-image {
+  width: 100%; /* or any other default width */
+  max-width: 500px; /* Set a max width if necessary */
+  height: auto; /* To maintain the aspect ratio */
+}
+.reset {
+  color: #007191;
+}
+.img-logo-flight {
+  width: 50px;  /* Adjust width as needed */
+  height: auto;  /* Maintain aspect ratio */
+}
+.detail-btn{
+font-size: 14px;
+display: block;
+background-color: #DAF4FF2B;
+color: #007191;
+}
+.flight-details-text{
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.fixed-bottom-center {
+  position: fixed;
+  bottom: 10px; /* Distance from the bottom of the screen */
+  z-index: 9999; /* Ensure it appears above other content */
+}
+.selected-container{
+  background-color: #003E58;
+}
+.selected-flight-card{
+  background-color: #DAF4FF0F;
+  gap: 20px;
+}
+.book-flight{
+  background-color: white;
+  line-height: 20px;
+  color: black;
+  border-radius: 4px;
+}
+/* Default SELECT button styles */
+.select {
+  background-color: #daf4ff;
+  color: #000;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  border-bottom-left-radius:5px ;
+  border-bottom-right-radius:5px ;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-one-way {
+  background-color: #007191;
+  color: white;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.select.selected {
+  background-color: #007191;
+  color: white;
+  border-bottom-left-radius:5px ;
+  border-bottom-right-radius:5px ;
+}
+
+/* Hover effect for SELECT button */
+.select:hover {
+  opacity: 0.8;
+}
+#filterSection {
+  position: -webkit-sticky;  /* For Safari */
+  position: sticky;
+  top: 20px; /* You can adjust this based on how far from the top you want it to start sticking */
+  max-height: 100vh; /* Ensures the filter box takes the full height of the viewport */
+  overflow-y: auto;  /* Allows scrolling within the filter box if content overflows */
+  padding-right: 15px; /* Optional, for scrollbar appearance */
+}
+.filter {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.filter-time-btn{
+  font-size: 14px;
+}
+/* Custom radio button color */
+.form-check-input:checked {
+  background-color: #007191 !important;
+  border-color: #007191 !important;
+}
+.form-check-input:hover {
+  border-color: #007191 !important;
+}
+.departure button,
+.arrival button {
+  background-color: #0C68BE1A;
+  text-align: center;
+}
+/* Time filter buttons styling */
+.filter-time-btn {
+  background-color: #0C68BE1A;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.filter-time-btn.selected {
+  background-color: #007191 !important; /* Primary color */
+  color: white !important;
+}
+
+.filter-time-btn.selected .time-period {
+  color: white !important;
+}
+
+.filter-time-btn.selected .time-frame {
+  color: white !important;
+}
+
+.time-period {
+  color: #007191;
+  font-weight: 600;
+}
+
+/* Hover effects */
+.filter-time-btn:hover {
+  background-color: #007191;
+  color: white;
+}
+
+.filter-time-btn:hover .time-period {
+  color: white;
+}
+.departure button:hover,
+.arrival button:hover {
+  background-color: var(--primary);
+  color: var(--white);
+  border: 1px solid var(--black);
+}
+.no-of-flights {
+  background-color: #daf4ff;
+}
+.detail-btn {
+  color: var(--primary);
+}
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .arrow-card.default-image {
+      width: 80%; /* Adjust width for mobile, you can change this value */
+    }
+  }
+
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  
+  .tooltip-container:hover .tooltip-text {
+    visibility: visible;
+  }
+
+/* round trip column opacity  */
+.flight-column {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.roundtrip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(1px); /* Apply blur effect */
+  z-index: 10;
+}
+
+@media (min-width: 992px) {
+  .inactive-lg {
+    opacity: 0.5; /* Reduce visibility */
+    pointer-events: none; /* Disable interactions */
+    filter: grayscale(50%);
+  }
+}
+
+/* 👇 Small Screens: Hide the Unselected Trip */
+@media (max-width: 991px) {
+  .flight-column {
+    display: none;
+  }
+
+  /* ✅ Show only the selected trip */
+  .flight-column.active-sm {
+    display: block !important;
+  }
+  }
+  
+  .toggle-roundtrip-cards.btn {
+    color: black;
+    padding: 10px;
+    border-radius: 2px;
+  }
+  
+  .toggle-roundtrip-cards.btn.selected {
+    background-color: #007191;
+    color: white;
+  }
+  
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .select.selected {
+    background-color: #007191; /* Darker blue when selected */
+  }
+  
+/* Reduce button width & font size */
+.small-btn {
+  font-size: 12px;  /* Decrease font size */
+  max-width: 120px; /* Reduce button width */
+}
+
+/* Active button */
+.details-toggle {
+  background-color: #007191 !important;
+  color: white !important;
+  border: none;
+}
+
+/* Inactive button */
+.btn-light {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #ccc;
+}
+/* multicity results css  */
+.multicity-cards-toggle{
+  background-color: white;
+  border: 1px solid rgb(192, 192, 192);
+  padding: 0;
+}
+.toggle-multicity-cards.btn {
+  color: black;
+  padding: 10px;
+  border-radius: 0px;
+  border-left: 1px solid rgb(192, 192, 192);
+}
+.multicity-flight-details-expanded {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  overflow: hidden; /* Hide content when collapsed */
+  padding: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  transition:
+    max-height 0.5s ease-in-out,
+    opacity 0.4s ease-in-out,
+    transform 0.4s ease-in-out,
+    padding 0.4s ease-in-out;
+}
+
+.multicity-flight-details-expanded.show {
+  max-height: 500px; /* Large enough to ensure scroll works */
+  opacity: 1;
+  transform: translateY(0);
+  padding: 10px;
+  overflow-y: auto; /* Allow scrolling */
+}
+
+
+.multicity-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(1px); /* Apply blur effect */
+  z-index: 10;
+}
+.toggle-multicity-cards.btn.selected {
+  background-color: #007191;
+  color: white;
+}
+.loader-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 50vh; /* Full screen height */
+}
+
+.loader {
+  width: 300px; /* Adjust the size */
+  height: auto;
+}
+
+/* Card Container */
+.flight-card {
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.flight-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Top Row Layout: Three Columns */
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Left Block: Airline Logo & Flight Name */
+.left-block {
+  display: flex;
+  align-items: center;
+}
+.airline-logo {
+  object-fit: contain;
+  max-height: 30px;
+  min-width: 30px;
+  border-radius: 4px;
+}
+
+/* Add hover effect if desired */
+.airline-logo:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+.flight-name {
+  font-size: 1rem;
+}
+
+/* Middle Block: Origin & Destination */
+.middle-block {
+  flex-grow: 1;
+  text-align: center;
+}
+.middle-block .origin,
+.middle-block .destination {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.duration-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* Right Block: Price & Buttons */
+.right-block {
+  width: 200px;         /* Set fixed width */
+  text-align: center;   /* Align all items in the center */
+}
+
+/* Book Flight Button Width */
+.book-one-way {
+  width: 200px;         /* Force button to be 200px wide */
+}
+
+.price-info .price {
+  font-size: 1.25rem;
+}
+.price-info {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+.view-prices-link {
+  font-size: 0.75rem;
+  color: #007191;
+  text-decoration: underline;
+  cursor: pointer;
+
+}
+.book-flight-btn {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  background-color: #007191;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  margin-top: 0.2rem;
+}
+.book-flight-btn:hover {
+  background-color: #0069d9;
+}
+.view-details-link {
+  font-size: 0.75rem;
+  color: #007191;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 0.2rem;
+  border-bottom: 1px solid #007191;
+}
+
+/* Flight Timing Row */
+.flight-timing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.departure-info, .arrival-info {
+  font-size: 0.85rem;
+}
+.duration-info {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* Expandable Section */
+.expandable-section {
+  display: none;
+  margin-top: 0.5rem;
+}
+.expandable-section.show {
+  display: block;
+}
+
+/* Blue Card for Flight Details */
+.blue-card {
+  background-color: #eef7ff;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+.details-text {
+  font-size: 0.8rem;
+  color: #333;
+}
+.route-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+.baggage-info .baggage-block {
+  font-size: 0.8rem;
+  color: #333;
+}
+
+/* Tab Toggle Buttons */
+.btn-group.tab-toggle .small-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+.btn-group.tab-toggle .details-toggle {
+  background-color: #007bff;
+  color: #fff;
+}
+.btn-group.tab-toggle .btn-light {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Seats Left */
+.seats-left {
+  font-size: 0.75rem;
+  color: #dc3545;
+}
+.flight-stops {
+  font-style: italic;
+}
+.flex-md-col{
+  flex-direction: column;
+}
+
+.price-slider-container {
+  position: relative;
+  padding-top: 20px; /* Make room for the tooltip */
+}
+
+.price-tooltip {
+  position: absolute;
+  top: -25px;
+  transform: translateX(-50%);
+  background-color: var(--primary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.price-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--primary);
+}
+
+/* Improve slider appearance */
+.form-range::-webkit-slider-thumb {
+  background: var(--primary);
+}
+
+.form-range::-moz-range-thumb {
+  background: var(--primary);
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: #e9ecef;
+}
+
+.form-range::-moz-range-track {
+  background: #e9ecef;
+}

@@ -1,0 +1,145 @@
+<div class="common-form">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="row mb-4 align-items-center">
+      <!-- From -->
+      <div class="col-md-5">
+        <label for="from">From</label>
+        <ng-select [items]="listOfAirports" bindLabel="displayLabel" bindValue="iataCode" placeholder="Select Airport"
+          [clearable]="false" formControlName="origin" (change)="selectAirport($event, 'origin')"
+          [typeahead]="searchInput$" (search)="onSearch($event.term)">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span>{{ item.airportCity }}</span> (<span>{{ item.iataCode }}</span>)<br />
+                <span class="text-muted small">{{ item.airportName }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+        <div *ngIf="formGroup.get('origin')?.invalid && formGroup.get('origin')?.touched" class="text-danger small">
+          Please select airport.
+        </div>
+      </div>
+
+      <!-- Swap Icon -->
+      <div class="col-md-2 text-center mt-4">
+        <img src="assets/icons/form arrow.svg" alt="arrow" class="arrow-icon" (click)="swapAirports.emit()" />
+      </div>
+
+      <!-- To -->
+      <div class="col-md-5">
+        <label for="to">To</label>
+        <ng-select [items]="listOfAirports" bindLabel="displayLabel" bindValue="iataCode" placeholder="Select Airport"
+          [clearable]="false" formControlName="destination" (change)="selectAirport($event, 'destination')"
+          [typeahead]="searchInput$" (search)="onSearch($event.term)">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.iataCode }} - {{ item.airportCity }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span>{{ item.airportCity }}</span> (<span>{{ item.iataCode }}</span>)<br />
+                <span class="text-muted small">{{ item.airportName }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+        <div *ngIf="formGroup.get('destination')?.invalid && formGroup.get('destination')?.touched"
+          class="text-danger small">
+          Please select airport.
+        </div>
+      </div>
+    </div>
+
+    <!-- Departure and optional Return -->
+    <div class="row mb-3 justify-content-between">
+      <div class="col-md-5">
+        <label for="departure">Departure</label>
+        <input 
+          class="form-control" 
+          type="date" 
+          formControlName="fromDate" 
+          [min]="today"
+          (change)="updateMinToDate()" 
+        />
+        <div *ngIf="formGroup.get('fromDate')?.invalid && formGroup.get('fromDate')?.touched" 
+          class="text-danger small">
+          Please select a departure date.
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <label for="return">Return</label>
+        <input 
+          class="form-control" 
+          name="toDate" 
+          type="date" 
+          formControlName="toDate" 
+          [min]="minToDate"
+          (change)="onReturnDateChange($event)"
+        />
+        <div *ngIf="formGroup.get('toDate')?.invalid && formGroup.get('toDate')?.touched" 
+          class="text-danger small">
+          Please select a valid return date.
+        </div>
+      </div>
+    </div>
+    <!-- Passenger Sliders -->
+    <div class="row mb-4">
+      <div class="passenger-input col-md-4">
+        <label class="passenger-label">Adult <span class="age-info">(12+ Yrs)</span></label>
+        <ngx-slider formControlName="adults" [options]="adultOptions"></ngx-slider>
+      </div>
+      <div class="passenger-input col-md-4">
+        <label class="passenger-label">Child <span class="age-info">(2-12 Yrs)</span></label>
+        <ngx-slider formControlName="children" [options]="childOptions"></ngx-slider>
+      </div>
+      <div class="passenger-input col-md-4">
+        <label class="passenger-label">Infant <span class="age-info">(0-2 Yrs)</span></label>
+        <ngx-slider formControlName="infants" [options]="infantOptions"></ngx-slider>
+      </div>
+    </div>
+
+    <!-- Special Fares -->
+    <div class="row mb-4">
+      <label>Special fares</label>
+      <div class="special d-flex justify-content-between mt-2">
+        <span *ngFor="let fare of specialFares" class="btn badge" [class.active]="isSpecialFareSelected(fare.id)"
+          (click)="toggleSpecialFare(fare.id)">
+          {{fare.label}}
+        </span>
+      </div>
+    </div>
+
+    <!-- Route + Class -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <label for="routes">Routes</label>
+        <select class="form-select" formControlName="routes">
+          <option value="Non Stop">Non Stop</option>
+          <option value="1 Stop">1 Stop</option>
+          <option value="2 Stop">2 Stop</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="class">Class</label>
+        <select class="form-select" formControlName="class">
+          <option value="Economy">Economy</option>
+          <option value="Premium Economy">Premium Economy</option>
+          <option value="Business">Business</option>
+          <option value="First Class">First Class</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <button type="submit" class="btn btn-continue">
+        <img src="assets/icons/search.svg" alt="Search Icon" class="me-1" />
+        Search Flights
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,89 @@
+/* .payment-card {
+    width: 25%;
+} */
+.body-page {
+  background-color: #f3f7fc;
+}
+.main-flight-details-card{
+  box-shadow: 0px 0px 3px 0px #00000040;
+}
+.main-fare {
+  border: solid #06162d0d;
+  border-radius: 5px;
+}
+.departure-card{
+  box-shadow: 0px 0px 2px 0px #00000040;
+}
+.departure-flight{
+  background-color: #f6f6f6e9;
+}
+.arrival-card{
+  box-shadow: 0px 0px 3px 0px #00000040;
+}
+.arrival-flight{
+  background-color: #f6f6f6e9;
+}
+.dotted-line {
+  border-left: 2px dotted #000;
+  height: 30px;
+}
+.layover-time{
+  color: #EE6336;
+}
+.cabin-class-text{
+  background: linear-gradient(to right, #6AC2E4, #3B95B7);
+  color: white;
+  border-radius: 5px;
+  padding: 2px;
+}
+.vertical-line{
+  color: #CBCBCB;
+}
+.airport-details{
+  background-color: #DAF4FF80;
+  font-size: 14px;
+}
+.baggage-details{
+  font-size: 14px;
+}
+.continue-btn {
+  background-color: var(--primary);
+  color: var(--white);
+}
+/* Flexbox container to align items in one line */
+.d-flex {
+  display: flex;
+  align-items: center; /* Align vertically in the center */
+}
+
+/* Adjust image size to be small based on text size */
+.img-small {
+  width: 16px; /* Adjust width as needed */
+  height: 16px; /* Adjust height to maintain aspect ratio */
+}
+/* modal css */
+
+.modal-detail-btn {
+  color: var(--primary);
+}
+
+.background-image {
+  opacity: 0.1;
+}
+/* .alert {
+  background-color: #e9ecef;
+} */
+.custom-background {
+  background-color: #e7f5ff;
+  font-size: 12px;
+}
+.add-passenger {
+  border: solid #007191;
+}
+.add-passenger p {
+  color: var(--primary);
+}
+.btn-bookf {
+  background-color: var(--primary);
+  color: var(--white);
+}

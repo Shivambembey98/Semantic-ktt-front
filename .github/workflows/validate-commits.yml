@@ -1,0 +1,19 @@
+name: Validate Commit Messages
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+      types: [opened, edited, synchronize, reopened]
+jobs:
+  lint-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate commit messages
+        uses: wagoid/commitlint-github-action@v5
+        with:
+          configFile: .commitlintrc.yml

@@ -1,0 +1,332 @@
+/* -----------------------
+   Global Styles for Updated UI
+   ----------------------- */
+
+/* Badge styles */
+.badge {
+  background-color: #f3f4f6 !important;
+  color: var(--black);
+  border-radius: 18px;
+  line-height: 20px;
+  font-weight: 500;
+}
+.badge:hover {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+/* Active element highlighting */
+.active {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+/* Form select & control field styles */
+.form-select {
+  color: #757575;
+  border: solid 1px #BCC8D1;
+}
+.form-control {
+  color: #757575;
+  border: solid 1px #BCC8D1;
+}
+input[type="button"]:focus {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Continue/search button */
+.btn-continue {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Passenger Input (used in common-flight-fields and multi-city components) */
+.passenger-input {
+  position: relative; /* allows for relative positioning of any inner elements */
+}
+
+/* Passenger label additional info */
+.passenger-label .age-info {
+  display: none; /* Hidden by default */
+  margin-left: 8px;
+}
+.passenger-input:hover .passenger-label .age-info {
+  display: inline; /* Show when hovering */
+}
+
+/* Override ngx-slider pointer size */
+ngx-slider .ngx-slider-pointer {
+  width: 10px !important;
+  height: 10px !important;
+}
+ngx-slider .ngx-slider-pointer-range {
+  width: 10px !important;
+  height: 10px !important;
+}
+ngx-slider .ngx-slider-pointer:after {
+  background-color: transparent !important;
+}
+
+/* -----------------------
+   Carousel Section
+   ----------------------- */
+#hero {
+  position: relative;
+}
+
+/* Carousel items — these classes are assumed to be inside <app-carousel>'s template */
+.carousel-item {
+  height: 750px !important;
+}
+.item-one {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../assets/images/hero.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.item-two {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../assets/images/hero1.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.item-three {
+  background: linear-gradient(
+      228deg,
+      rgba(238, 238, 238, 0.486) 0%,
+      rgba(84, 206, 240, 0.486) 100%
+    ),
+    url(../../../assets/images/hero2.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* -----------------------
+   Form Container & Card
+   ----------------------- */
+.form-container {
+  max-width: 550px;
+  z-index: 10;
+  border-radius: 10px;
+  box-shadow: 0 0px 0px 0px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 50px;
+  background-color: white;
+  padding: 16px;
+}
+.form-container label {
+  margin-bottom: 5px;
+}
+/* Navigation tabs inside the form (for flight-type-tabs component) */
+.nav-pills {
+  display: flex;
+  background-color: white;
+}
+.nav-item input {
+  cursor: pointer;
+}
+.form-container .form-control {
+  margin-bottom: 10px;
+}
+
+/* Form Type header styling (could be applied on a wrapper div, e.g. .form-type) */
+.form-type {
+  border-bottom: 5px solid #007191;
+}
+
+/* Card container (wraps the content inside the form container) */
+.card {
+  border: none;
+  border-radius: 0%;
+}
+
+/* Hide mobile dropdown by default */
+.mobile-dropdown {
+  display: none;
+}
+
+/* -----------------------
+   Multi-City Flight Tabs (in app-multi-city-fields)
+   ----------------------- */
+.flight-tab {
+  padding: 5px 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.remove-icon {
+  color: red;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.add-flight {
+  color: #2a6f97;
+}
+
+/* -----------------------
+   Responsive Overrides for Mobile
+   ----------------------- */
+@media (max-width: 767px) {
+  /* Hide carousel on mobile (if desired) */
+  #carouselExampleControls {
+    display: none;
+  }
+  .mobile-dropdown {
+    display: block;
+  }
+  .form-container {
+    position: relative;
+    transform: none;
+    padding: 1.5rem;
+    margin-left: 0;
+    border: none;
+    border-radius: 0;
+    background-image: url("../../../assets/images/mobile-form-bg.jpg"); /* mobile background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: transparent;
+  }
+  .nav-item .btn {
+    font-size: 14px;
+  }
+  .form-type {
+    border-bottom: 3px solid #007191;
+  }
+  
+  /* Adjust From/To fields */
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .col-md-5 {
+    width: 40%;
+  }
+  .col-md-2 {
+    width: 20%;
+    text-align: center;
+  }
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  /* Date pickers */
+  .col-md-5 input[type="date"] {
+    font-size: 14px;
+  }
+  
+  /* Special Fares (in common-flight-fields or multi-city) */
+  .special {
+    display: flex;
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    scroll-padding: 10px;
+    background-color: white;
+  }
+  .special::-webkit-scrollbar {
+    display: none;
+  }
+  .special {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .special .badge {
+    scroll-snap-align: start;
+    flex: 0 0 30%;
+    background: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 18px;
+  }
+  
+  /* Routes and Class selection */
+  .col-md-6 {
+    width: 48%;
+  }
+  .col-md-6 select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  /* Search button */
+  .btn-continue {
+    width: 100%;
+    border: none;
+    padding: 6px;
+    font-size: 16px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .btn-continue img {
+    width: 16px;
+    margin-right: 8px;
+  }
+  
+  /* Hide passenger-input for mobile (if using dropdown instead) */
+  .passenger-input {
+    display: none;
+  }
+  
+  /* Multi-city flight tabs adjustments */
+  .flight-tab {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+  .remove-icon {
+    font-size: 12px;
+  }
+  .add-flight {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .flight-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* -----------------------
+   Dropdown Styles (for mobile passenger dropdown)
+   ----------------------- */
+.dropdown-menu {
+  background-color: #f7f7f7;
+  width: 100%;
+}
+.passenger-type {
+  font-size: 14px;
+}
+.dropdown-toggle {
+  font-size: 14px;
+  width: 100%;
+  border: solid #ccc;
+  border-radius: 5px;
+}

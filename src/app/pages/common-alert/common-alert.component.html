@@ -1,0 +1,37 @@
+<div
+  class="modal fade"
+  id="commonAlertModal"
+  tabindex="-1"
+  aria-labelledby="commonAlertLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content position-relative">
+      <!-- Background image -->
+      <img
+        src="../../../assets/svgs/Alert Image.svg"
+        alt=""
+        class="background-image"
+      />
+
+      <!-- Modal Header -->
+      <div class="modal-header p-2">
+        <h5 class="modal-title w-100 text-center mb-0">Message</h5>
+        <button
+        type="button"
+        class="btn-close small-close me-1"
+        (click)="close()"
+        aria-label="Close"
+      ></button>     
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body p-2">
+        <p class="mb-1 modal-message text-center">{{ message }}</p>
+        <div class="text-end">
+          <button class="btn alert-btn p-1" (click)="close()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1171 @@
+<div class="body-page py-3">
+  <div class="container">
+    <form [formGroup]="passengerForm" (ngSubmit)="onSubmit()">
+      <!-- Information Card -->
+      <div class="row">
+        <div class="col-lg-9 col-md-12">
+          <div class="information-card">
+            <div class="row my-2">
+              <h5>Flight Detail Order</h5>
+            </div>
+            <div class="main-flight-details-card p-3 card gap-3">
+              <!-- Departure Card -->
+              <div class="card departure-card" *ngIf="departureFlight">
+                <div class="card-body d-flex flex-column gap-2 pt-3 p-0">
+                  <div class="d-flex w-100 ps-2 gap-3 flex-wrap">
+                    <img
+                      src="assets/svgs/departure-plane.svg"
+                      alt="Departure Icon"
+                      height="30"
+                      width="30"
+                    />
+                    <h6 class="mb-0">Departure Flight</h6>
+                    <span class="vertical-line">|</span>
+                    <h5 class="mb-0">
+                      {{ departureAirport?.airportCity }} -
+                      {{ arrivalAirport?.airportCity }}
+                    </h5>
+                    <span class="vertical-line">|</span>
+                    <h5 class="mb-0">{{ departureFlight.departure_day }}</h5>
+                    <span class="vertical-line">|</span>
+                    <div class="cabin-class-text px-2">Economy</div>
+                  </div>
+
+                  <!-- DIRECT FLIGHT -->
+                  <div
+                    *ngIf="
+                      departureFlight.type === 'direct';
+                      else connectingFlight
+                    "
+                    class="d-flex w-100 ps-2 gap-3"
+                  ></div>
+
+                  <!-- DIRECT FLIGHT INFO SECTION -->
+                  <div
+                    *ngIf="departureFlight.type === 'direct'"
+                    class="departure-flight mb-2 w-100"
+                  >
+                    <h6 class="mb-0 mt-2 ps-3">
+                      <img [src]="departureFlight.logo" alt="Flight Logo" style="height: 30px;"/>
+                      -
+                      {{ departureFlight.flightNumber }}
+                    </h6>
+                    <div class="row card-body align-items-center ps-3">
+                      <!-- Route Info -->
+                      <div class="col-12 col-md-6 d-flex gap-3">
+                        <div class="text-end">
+                          <h6 class="mb-0">
+                            {{ departureAirport?.airportCity }}
+                          </h6>
+                          <small class="text-muted"
+                            >({{ departureAirport?.iataCode }})</small
+                          >
+                        </div>
+                        <img
+                          src="/assets/icons/plane-ticket.png"
+                          alt="Plane Icon"
+                          height="30"
+                          width="100"
+                        />
+                        <div class="text-start">
+                          <h6 class="mb-0">
+                            {{ arrivalAirport?.airportCity }}
+                          </h6>
+                          <small class="text-muted"
+                            >({{ arrivalAirport?.iataCode }})</small
+                          >
+                        </div>
+                      </div>
+
+                      <!-- Timing Info -->
+                      <div class="col-12 col-md-6 d-flex gap-3">
+                        <h6 class="mb-0">
+                          {{ departureFlight.departure_time }}
+                        </h6>
+                        <img
+                          src="/assets/icons/dotted line.svg"
+                          alt="Dotted Line"
+                          class="mx-2 img-small"
+                        />
+                        <div class="d-flex flex-column align-items-start">
+                          <h6 class="mb-0 text-danger">
+                            {{ departureFlight.duration }}
+                          </h6>
+                        </div>
+                        <img src="/assets/icons/arrow.svg" alt="Arrow" />
+                        <h6 class="mb-0">{{ departureFlight.arrival_time }}</h6>
+                      </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Airport Info with Full-Width Blue Background -->
+                    <div class="airport-details w-100">
+                      <div class="py-1 ps-3 d-flex flex-wrap gap-lg-4 gap-md-1">
+                        <div>
+                          <span class="fw-semibold"
+                            >{{ departureAirport?.airportCity }}:</span
+                          >
+                          <span
+                            >{{ departureAirport?.airportName }}, Terminal-{{
+                              departureFlight.originTerminal
+                            }}</span
+                          >
+                        </div>
+                        <span style="color: #3b95b7">|</span>
+                        <div>
+                          <span class="fw-semibold"
+                            >{{ arrivalAirport?.airportCity }}:</span
+                          >
+                          <span
+                            >{{ arrivalAirport?.airportName }}, Terminal-
+                            {{ departureFlight.destinationTerminal }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Baggage Info -->
+                    <div
+                      class="d-flex mb-2 baggage-details flex-wrap align-items-center gap-4 ps-3 mt-2"
+                    >
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/luggage.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Cabin Baggage:</span>
+                        <span>{{ baggageCarryOnFormatted }}</span>
+                      </div>
+
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/cabin-bag.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Check-in Baggage:</span>
+                        <span>{{ baggageCheckedFormatted }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- CONNECTING FLIGHT TEMPLATE -->
+                  <ng-template #connectingFlight>
+                    <div
+                      *ngFor="
+                        let segment of departureFlight.flights;
+                        let i = index
+                      "
+                      class="segment-section w-100"
+                    >
+                      <!-- FLIGHT HEADER -->
+
+                      <!-- CONNECTING FLIGHT INFO SECTION -->
+                      <div class="departure-flight mb-2">
+                        <h6 class="mb-0 mt-2 ps-3 pt-2">
+                          <img [src]="departureFlight.logo" alt="Flight Logo" style="height: 30px;"/> -
+                          {{ segment.flightNumber || "N/A" }}
+                        </h6>
+
+                        <div class="row card-body align-items-center ps-3">
+                          <div class="col-12 col-md-6 d-flex gap-3">
+                            <div class="text-end">
+                              <h6 class="mb-0">
+                                {{ getCityName(segment.origin) }}
+                              </h6>
+                              <small class="text-muted"
+                                >({{ segment.origin }})</small
+                              >
+                            </div>
+                            <img
+                              src="/assets/icons/plane-ticket.png"
+                              alt="Plane Icon"
+                              height="30"
+                              width="100"
+                            />
+                            <div class="text-start">
+                              <h6 class="mb-0">
+                                {{ getCityName(segment.destination) }}
+                              </h6>
+                              <small class="text-muted"
+                                >({{ segment.destination }})</small
+                              >
+                            </div>
+                          </div>
+
+                          <div class="col-12 col-md-6 d-flex gap-3">
+                            <h6 class="mb-0">
+                              {{ segment.departureTime | date : "shortTime" }}
+                            </h6>
+                            <img
+                              src="/assets/icons/dotted line.svg"
+                              alt="Dotted Line"
+                              class="mx-2 img-small"
+                            />
+                            <div class="d-flex flex-column align-items-start">
+                              <h6 class="mb-0 text-danger">
+                                {{ segment.duration }}
+                              </h6>
+                            </div>
+                            <img src="/assets/icons/arrow.svg" alt="Arrow" />
+                            <h6 class="mb-0">
+                              {{ segment.arrivalTime | date : "shortTime" }}
+                            </h6>
+                          </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="airport-details w-100">
+                          <div
+                            class="py-1 ps-3 d-flex flex-wrap gap-lg-4 gap-md-1"
+                          >
+                            <div>
+                              <span class="fw-semibold"
+                                >{{ getCityName(segment.origin) }}:</span
+                              >
+                              <span
+                                >{{
+                                  getAirportByIata(segment.origin)?.airportName
+                                }}, Terminal-{{
+                                  segment.originTerminal || "N/A"
+                                }}</span
+                              >
+                            </div>
+                            <span style="color: #3b95b7">|</span>
+                            <div>
+                              <span class="fw-semibold"
+                                >{{ getCityName(segment.destination) }}:</span
+                              >
+                              <span
+                                >{{
+                                  getAirportByIata(segment.destination)
+                                    ?.airportName
+                                }}, Terminal-{{
+                                  segment.destinationTerminal || "N/A"
+                                }}</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Show layover only after the first segment -->
+                      <div
+                        *ngIf="i === 0 && departureFlight.flights.length > 1"
+                        class="layover-details d-flex align-items-center ms-3 gap-2"
+                      >
+                        <div class="dotted-line"></div>
+
+                        <div class="d-flex align-items-center gap-2">
+                          <img
+                            src="../../../assets/svgs/small-plane.svg"
+                            alt="Plane"
+                            height="20"
+                          />
+                          <span class="layover-time">Layover:</span>
+                          <span>{{
+                            getLayoverText(departureFlight.layovers)
+                          }}</span>
+                        </div>
+
+                        <div class="dotted-line"></div>
+                      </div>
+                    </div>
+
+                    <!-- BAGGAGE INFO (Shared) -->
+                    <div
+                      class="d-flex mb-2 baggage-details flex-wrap align-items-center gap-4 ps-3 mt-2"
+                    >
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/luggage.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Cabin Baggage:</span>
+                        <span>{{ baggageCheckedFormatted }}</span>
+                      </div>
+
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/cabin-bag.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Check-in Baggage:</span>
+                        <span>{{ baggageCarryOnFormatted }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+
+              <!-- Arrival Card (for round trip) -->
+              <div class="card arrival-card" *ngIf="arrivalFlight">
+                <div class="card-body d-flex flex-column gap-2 pt-3 p-0">
+                  <div class="d-flex w-100 ps-2 gap-3">
+                    <img
+                      src="assets/svgs/arrival-plane.svg"
+                      alt="Arrival Icon"
+                      height="30"
+                      width="30"
+                    />
+                    <h6 class="mb-0">Return Flight</h6>
+                    <span class="vertical-line">|</span>
+                    <h5 class="mb-0">
+                      {{ returnDepartureAirport?.airportCity }} -
+                      {{ returnArrivalAirport?.airportCity }}
+                    </h5>
+                    <span class="vertical-line">|</span>
+                    <h5 class="mb-0">{{ arrivalFlight.departure_day }}</h5>
+                    <span class="vertical-line">|</span>
+                    <div class="cabin-class-text px-2">Economy</div>
+                  </div>
+
+                  <!-- DIRECT FLIGHT -->
+                  <div
+                    *ngIf="
+                      arrivalFlight.type === 'direct-return';
+                      else returnConnectingFlight
+                    "
+                    class="d-flex w-100 ps-2 gap-3"
+                  ></div>
+
+                  <!-- DIRECT RETURN FLIGHT INFO SECTION -->
+                  <div
+                    *ngIf="arrivalFlight.type === 'direct-return'"
+                    class="arrival-flight mb-2 w-100"
+                  >
+                    <h6 class="mb-0 mt-2 ps-3">
+                      {{ arrivalFlight.airline }} -
+                      {{ arrivalFlight.flightNumber }}
+                    </h6>
+                    <div class="row card-body align-items-center ps-3">
+                      <div class="col-12 col-md-6 d-flex gap-3">
+                        <div class="text-end">
+                          <h6 class="mb-0">
+                            {{ returnDepartureAirport?.airportCity }}
+                          </h6>
+                          <small class="text-muted"
+                            >({{ returnDepartureAirport?.iataCode }})</small
+                          >
+                        </div>
+                        <img
+                          src="/assets/icons/plane-ticket.png"
+                          alt="Plane Icon"
+                          height="30"
+                          width="100"
+                        />
+                        <div class="text-start">
+                          <h6 class="mb-0">
+                            {{ returnArrivalAirport?.airportCity }}
+                          </h6>
+                          <small class="text-muted"
+                            >({{ returnArrivalAirport?.iataCode }})</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-6 d-flex gap-3">
+                        <h6 class="mb-0">{{ arrivalFlight.departure_time }}</h6>
+                        <img
+                          src="/assets/icons/dotted line.svg"
+                          alt="Dotted Line"
+                          class="mx-2 img-small"
+                        />
+                        <div class="d-flex flex-column align-items-start">
+                          <h6 class="text-danger mb-0">
+                            {{ arrivalFlight.durationn }}
+                          </h6>
+                        </div>
+                        <img src="/assets/icons/arrow.svg" alt="Arrow" />
+                        <h6 class="mb-0">{{ arrivalFlight.arrival_time }}</h6>
+                      </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="airport-details w-100">
+                      <div class="py-1 ps-3 d-flex flex-wrap gap-lg-4 gap-md-1">
+                        <div>
+                          <span class="fw-semibold"
+                            >{{ returnDepartureAirport?.airportCity }}:</span
+                          >
+                          <span
+                            >{{ returnDepartureAirport?.airportName }},
+                            Terminal-{{ arrivalFlight.originTerminal }}</span
+                          >
+                        </div>
+                        <span style="color: #3b95b7">|</span>
+                        <div>
+                          <span class="fw-semibold"
+                            >{{ returnArrivalAirport?.airportCity }}:</span
+                          >
+                          <span
+                            >{{ returnArrivalAirport?.airportName }},
+                            Terminal-{{
+                              arrivalFlight.destinationTerminal
+                            }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="d-flex mb-2 baggage-details flex-wrap align-items-center gap-4 ps-3 mt-2"
+                    >
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/luggage.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Cabin Baggage:</span>
+                        <span>{{
+                          getFormattedBaggageDetail(
+                            arrivalFlight.baggageCarryOn
+                          )
+                        }}</span>
+                      </div>
+
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/cabin-bag.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Check-in Baggage:</span>
+                        <span>{{
+                          getFormattedBaggageDetail(
+                            arrivalFlight.baggageChecked
+                          )
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- CONNECTING RETURN FLIGHT TEMPLATE -->
+                  <ng-template #returnConnectingFlight>
+                    <div
+                      *ngFor="
+                        let segment of arrivalFlight.flights;
+                        let i = index
+                      "
+                      class="segment-section w-100"
+                    >
+                      <div class="arrival-flight mb-2">
+                        <h6 class="mb-0 mt-2 ps-3 pt-2">
+                          {{ arrivalFlight.airline }} -
+                          {{ segment.flightNumber || "N/A" }}
+                        </h6>
+
+                        <div class="row card-body align-items-center ps-3">
+                          <div class="col-12 col-md-6 d-flex gap-3">
+                            <div class="text-end">
+                              <h6 class="mb-0">
+                                {{ getCityName(segment.origin) }}
+                              </h6>
+                              <small class="text-muted"
+                                >({{ segment.origin }})</small
+                              >
+                            </div>
+                            <img
+                              src="/assets/icons/plane-ticket.png"
+                              alt="Plane Icon"
+                              height="30"
+                              width="100"
+                            />
+                            <div class="text-start">
+                              <h6 class="mb-0">
+                                {{ getCityName(segment.destination) }}
+                              </h6>
+                              <small class="text-muted"
+                                >({{ segment.destination }})</small
+                              >
+                            </div>
+                          </div>
+
+                          <div class="col-12 col-md-6 d-flex gap-3">
+                            <h6 class="mb-0">
+                              {{ segment.departureTime | date : "shortTime" }}
+                            </h6>
+                            <img
+                              src="/assets/icons/dotted line.svg"
+                              alt="Dotted Line"
+                              class="mx-2 img-small"
+                            />
+                            <div class="d-flex flex-column align-items-start">
+                              <h6 class="mb-0 text-danger">
+                                {{ segment.duration }}
+                              </h6>
+                            </div>
+                            <img src="/assets/icons/arrow.svg" alt="Arrow" />
+                            <h6 class="mb-0">
+                              {{ segment.arrivalTime | date : "shortTime" }}
+                            </h6>
+                          </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="airport-details w-100">
+                          <div
+                            class="py-1 ps-3 d-flex flex-wrap gap-lg-4 gap-md-1"
+                          >
+                            <div>
+                              <span class="fw-semibold"
+                                >{{ getCityName(segment.origin) }}:</span
+                              >
+                              <span
+                                >{{
+                                  getAirportByIata(segment.origin)?.airportName
+                                }}, Terminal-{{
+                                  segment.originTerminal || "N/A"
+                                }}</span
+                              >
+                            </div>
+                            <span style="color: #3b95b7">|</span>
+                            <div>
+                              <span class="fw-semibold"
+                                >{{ getCityName(segment.destination) }}:</span
+                              >
+                              <span
+                                >{{
+                                  getAirportByIata(segment.destination)
+                                    ?.airportName
+                                }}, Terminal-{{
+                                  segment.destinationTerminal || "N/A"
+                                }}</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        *ngIf="i === 0 && arrivalFlight.flights.length > 1"
+                        class="layover-details d-flex align-items-center ms-3 gap-2"
+                      >
+                        <div class="dotted-line"></div>
+                        <div class="d-flex align-items-center gap-2">
+                          <img
+                            src="../../../assets/svgs/small-plane.svg"
+                            alt="Plane"
+                            height="20"
+                          />
+                          <span class="layover-time">Layover:</span>
+                          <span>{{
+                            getLayoverText(arrivalFlight.layovers)
+                          }}</span>
+                        </div>
+                        <div class="dotted-line"></div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="d-flex mb-2 baggage-details flex-wrap align-items-center gap-4 ps-3 mt-2"
+                    >
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/luggage.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Cabin Baggage:</span>
+                        <span>{{
+                          getFormattedBaggageDetail(
+                            arrivalFlight.baggageCarryOn
+                          )
+                        }}</span>
+                      </div>
+
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="me-1"
+                          src="../../../assets/svgs/cabin-bag.svg"
+                          alt=""
+                        />
+                        <span class="fw-semibold me-1">Check-in Baggage:</span>
+                        <span>{{
+                          getFormattedBaggageDetail(
+                            arrivalFlight.baggageChecked
+                          )
+                        }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passenger details -->
+          <div class="information-card mt-2">
+            <!-- Passenger Details Section -->
+            <div class="row d-flex">
+              <h5>Passenger Details</h5>
+            </div>
+            <div>
+              <div class="row card-body d-flex justify-content-around">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <h6 class="mb-0">Passenger Info</h6>
+                  <!-- <select
+                    id="passengerType"
+                    class="form-select px-2 w-auto"
+                    style="min-width: 200px"
+
+                  >
+                    <option value="adult">Adult (over 12 yrs)</option>
+                    <option value="child">Child (2-12 yrs)</option>
+                    <option value="infant">Infant (0-2 yrs)</option>
+                    <option value="student">Student</option>
+                    <option value="seniorCitizen">Senior Citizen</option>
+                  </select> -->
+                </div>
+
+                <div class="row">
+                  <div class="m-0 p-0" formArrayName="passengers">
+                    <div
+                      *ngFor="
+                        let passenger of passengers.controls;
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                      class="card p-3 mb-3"
+                    >
+                      <!-- Show Passenger Type -->
+                      <div
+                        class="d-flex justify-content-between align-items-center mb-2"
+                      >
+                        <h6 class="mb-0">
+                          Passenger {{ i + 1 }} -
+                          <span class="text-primary text-capitalize">
+                            {{
+                              passengerLabels[
+                                passenger.get("passengerType")?.value
+                              ] || passenger.get("passengerType")?.value
+                            }}
+                          </span>
+                        </h6>
+                      </div>
+
+                      <!-- Passenger Form Fields -->
+                      <div
+                        class="row p-2 card-body d-flex justify-content-around"
+                      >
+                        <div class="col-md-3">
+                          <label>Title</label>
+                          <select class="form-select" formControlName="title">
+                            <option value="" disabled>Select Title</option>
+                            <option value="Mr.">Mr.</option>
+                            <option value="Mrs.">Mrs.</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <label>First Name</label>
+                          <input
+                            type="text"
+                            formControlName="firstName"
+                            class="form-control"
+                            placeholder="John"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <label>Last Name</label>
+                          <input
+                            type="text"
+                            formControlName="lastName"
+                            class="form-control"
+                            placeholder="Doe"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <label>Date of Birth</label>
+                          <input
+                            type="date"
+                            formControlName="dateOfBirth"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="row card-body p-2 d-flex">
+                        <div class="col-md-3">
+                          <label>Nationality</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Indian"
+                            formControlName="nationality"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <label>Gender</label>
+                          <select class="form-select" formControlName="gender">
+                            <option value="">--Select Gender--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card py-2">
+                    <h6 class="mt-2">
+                      Contact Info <small>(Details will be sent here)</small>
+                    </h6>
+                    <div
+                      class="row p-2 col-md-11 card-body d-flex justify-content-around"
+                      formGroupName="contactInfo"
+                    >
+                      <div class="col-md-6">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          formControlName="email"
+                          class="form-control"
+                          placeholder="abc@gmail.com"
+                        />
+                        <!-- <small
+                      class="text-danger"
+                    >
+                      Invalid email format!
+                    </small> -->
+                      </div>
+
+                      <div class="col-md-6">
+                        <label>Mobile Phone</label>
+                        <input
+                          type="number"
+                          formControlName="mobilePhone"
+                          class="form-control"
+                          placeholder="75xxxxxx900"
+                        />
+                        <small
+                          class="text-danger"
+                          *ngIf="f?.['mobilePhone']?.invalid && f?.['mobilePhone']?.touched"
+                        >
+                          Invalid mobile number! Must be 10 digits.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GST Info -->
+          <div>
+            <div class="row">
+              <h5 class="mt-3 mb-2">Add Your GST Details (Optional)</h5>
+            </div>
+            <div class="card">
+              <div class="card-body row">
+                <div class="col-md-12">
+                  <label for="">GST No</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="GST No"
+                  />
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="row my-3">
+                  <h6>Contact Detail</h6>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="">Company Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Company Name"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="">Address</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Company Address"
+                    />
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <label for="">Email</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="example@email.com"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="">Mobile Number</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter your Phone Number"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Services -->
+          <div>
+            <div class="row mt-4">
+              <h5>Additional Services (Optional)</h5>
+            </div>
+            <div class="card">
+              <div class="add-services d-flex justify-content-between">
+                <div class="p-3">
+                  <input id="radio1" type="radio" name="additional-service" />
+                  <span class="mx-2">Meals</span>
+                </div>
+                <div class="p-3">
+                  <input type="radio" name="additional-service" />
+                  <span class="mx-2">Baggage</span>
+                </div>
+                <div class="p-3">
+                  <input type="radio" name="additional-service" />
+                  <span class="mx-2">Select Seats</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Important guidelines section  -->
+          <div class="card mt-3">
+            <div class="card-body">
+              <div>
+                <h6>Important Guidelines</h6>
+              </div>
+
+              <div>
+                <ul>
+                  <li>
+                    When booking a flight, it is important for passengers to
+                    follow certain guidelines to ensure a smooth and stress-free
+                    experience. Here are some important guidelines for
+                    passengers to observe when booking a flight.
+                  </li>
+                  <li>
+                    Double-Check Travel Details: Before confirming your booking,
+                    carefully review all travel details, including dates,
+                    destinations, and passenger information. Ensure that the
+                    information entered is accurate to avoid any complications
+                    later on.
+                  </li>
+                </ul>
+                <span id="toggleButton" class="read-more">Read More...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Payment Card -->
+        <div class="col-lg-3 col-md-12">
+          <div class="payment-card position-sticky" style="top: 10px">
+            <div class="row mt-3">
+              <h5>Payment Details</h5>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="main-fare p-3">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>Base Fare</p>
+                    <h6>₹{{ totalBaseFare }}</h6>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>Fee & Surcharges</p>
+                    <h6>₹{{ totalTaxes }}</h6>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>Booking Fee</p>
+                    <h6>₹0</h6>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>cGST</p>
+                    <h6>₹0</h6>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>sGST</p>
+                    <h6>₹0</h6>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <p>IGST</p>
+                    <h6>₹0</h6>
+                  </div>
+                </div>
+                <hr />
+                <div class="fare-addon">
+                  <div class="d-flex justify-content-between mb-2">
+                    <p>Total Fare</p>
+                    <h6>₹{{ totalFare }}</h6>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <p>Add Ons</p>
+                    <h6>₹0</h6>
+                  </div>
+                </div>
+                <hr />
+                <div class="final-price">
+                  <div class="d-flex justify-content-between">
+                    <p>Price You Pay</p>
+                    <h6>₹{{ totalFare }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="my-3">
+              <button
+                type="submit"
+                class="btn continue-btn w-100"
+                id="flightDetailsModalTrigger"
+                data-bs-toggle="modal"
+                data-bs-target="#flightDetailsModal"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Modal  -->
+<div
+  class="modal fade"
+  id="flightDetailsModal"
+  tabindex="-1"
+  aria-labelledby="flightDetailsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <img
+        src="../../../assets/svgs/world-map.svg"
+        class="position-absolute top-0 start-0 w-100 h-100 background-image"
+        style="z-index: 0"
+      />
+
+      <div class="modal-header p-2 z-1">
+        <h5 class="modal-title" id="flightDetailsModalLabel">
+          Your Flight Detail
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <!-- Departure Flight -->
+          <div *ngIf="departureFlight" class="mb-4">
+            <h6 class="mb-2">Departure Flight</h6>
+            <ng-container *ngIf="departureFlight.flights?.length > 0; else singleDeparture">
+              <div *ngFor="let segment of departureFlight.flights; let i = index">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <strong>{{ getCityName(segment.origin) }}</strong> ({{ segment.origin }})
+                    →
+                    <strong>{{ getCityName(segment.destination) }}</strong> ({{ segment.destination }})
+                  </div>
+                  <div>
+                    <img [src]="departureFlight.logo || departureFlight.flight_img" alt="Airline Logo" height="20" /> - {{segment.flightNumber}}
+                  </div>
+                  <div>
+                    <span>{{ segment.departureTime | date : "shortTime" }}</span>
+                    →
+                    <span class="text-danger">{{ segment.duration }}</span>
+                    →
+                    <span>{{ segment.arrivalTime | date : "shortTime" }}</span>
+                  </div>
+                </div>
+          
+                <!-- Layover Info -->
+                <div *ngIf="i < departureFlight.flights.length - 1">
+                  <small class="text-muted ms-1">
+                    Layover at {{
+                      departureFlight.flights[i].destination
+                    }}: {{
+                      departureFlight.layovers?.[departureFlight.flights[i].destination]
+                    }} min
+                  </small>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #singleDeparture>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ getCityName(departureFlight.departure) }}</strong>
+                  ({{ departureFlight.departure }}) →
+                  <strong>{{ getCityName(departureFlight.arrival) }}</strong>
+                  ({{ departureFlight.arrival }})
+                </div>
+
+                <div>
+                  <img
+                    [src]="departureFlight.logo"
+                    alt="Airline Logo"
+                    height="20"
+                  /> - {{departureFlight.flightNumber}}
+                </div>
+
+                <div>
+                  <span>{{ departureFlight.departure_time }}</span>
+                  →
+                  <span class="text-danger">{{ departureFlight.duration }}</span>
+                  →
+                  <span>{{ departureFlight.arrival_time }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Return Flight (if round trip) -->
+          <div *ngIf="arrivalFlight" class="mb-4">
+            <h6 class="mb-2">Return Flight</h6>
+            <ng-container
+              *ngIf="arrivalFlight.segments?.length; else singleArrival"
+            >
+              <div
+                *ngFor="let segment of arrivalFlight.segments"
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <div>
+                  <strong>{{ getCityName(segment.departure) }}</strong>
+                  ({{ segment.departure }}) →
+                  <strong>{{ getCityName(segment.arrival) }}</strong>
+                  ({{ segment.arrival }})
+                </div>
+
+                <div>
+                  <img
+                    [src]="segment.logo"
+                    alt="Airline Logo"
+                    height="20"
+                  />
+                </div>
+
+                <div>
+                  <span>{{ segment.departure_time }}</span>
+                  →
+                  <span class="text-danger">{{ segment.duration }}</span>
+                  →
+                  <span>{{ segment.arrival_time }}</span>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #singleArrival>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ getCityName(arrivalFlight.departure) }}</strong>
+                  ({{ arrivalFlight.departure }}) →
+                  <strong>{{ getCityName(arrivalFlight.arrival) }}</strong>
+                  ({{ arrivalFlight.arrival }})
+                </div>
+
+                <div>
+                  <img
+                    [src]="arrivalFlight.logo"
+                    alt="Airline Logo"
+                    height="20"
+                  />
+                </div>
+
+                <div>
+                  <span>{{ arrivalFlight.departure_time }}</span>
+                  →
+                  <span class="text-danger">{{ arrivalFlight.duration }}</span>
+                  →
+                  <span>{{ arrivalFlight.arrival_time }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="review-page container" *ngIf="formData">
+            <h5 class="mb-2">Passenger & Contact Information</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Surname</th>
+                    <th>Gender</th>
+                    <th>D.O.B</th>
+                    <th>Nationality</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let passenger of formData.travelDtoList; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ passenger.prefix }} {{ passenger.firstName }}</td>
+                    <td>{{ passenger.lastName }}</td>
+                    <td>{{ passenger.gender === 'M' ? 'Male' : 'Female' }}</td>
+                    <td>{{ passenger.dob || 'N/A' }}</td>
+                    <td>{{ passenger.nationality || 'Indian' }}</td>
+                    <td>{{ passenger.phoneNumber || '+91 XXXXXXXX' }}</td>
+                    <td>{{ passenger.email || 'N/A' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+
+          <!-- Price & Actions -->
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-success">₹{{ totalFare }}</h4>
+            <div class="d-flex align-items-center gap-3">
+              <button
+                class="btn btn-bookf"
+                data-bs-dismiss="modal"
+                [routerLink]="['/flight-confirm']"
+              >
+                Book Flight
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

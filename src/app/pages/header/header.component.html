@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg header">
+  <div class="container-fluid px-3">
+    <div class="d-flex w-100 justify-content-between align-items-center flex-wrap">
+
+      <!-- Logo + Brand (Left) -->
+      <div class="d-flex align-items-center gap-2 flex-shrink-0 order-1 order-md-1">
+        <img
+          class="logo-img"
+          routerLink="/"
+          height="65"
+          width="90"
+          src="../../../assets/images/logo.png"
+          alt="Logo"
+        />
+        <div class="separator d-none d-md-block"></div>
+        <div class="brand-name">
+          <span class="brand-word">KWIK TRAVEL TRIP</span>
+        </div>
+      </div>
+
+      <!-- Tabs (Center) -->
+      <div class="tabs d-flex justify-content-center flex-grow-1 order-3 order-md-2 my-2 my-md-0">
+        <div class="tabs-container d-flex flex-wrap justify-content-center gap-2">
+          <div class="nav-tabset d-flex gap-1 small">
+            <!-- Tab 1 -->
+            <div class="d-flex p-2 px-3 align-items-center nav-tabs" routerLink="/">
+              <input type="radio" name="nav-tabset" id="nav-tab1" />
+              <span><img class="nav-img" src="../../../assets/svgs/nav-flight.svg" alt="Flights" /></span>
+              <label class="nav-tab-label ms-1" for="nav-tab1">Flights</label>
+            </div>
+            <!-- Tab 2 -->
+            <div (click)="redirectToGoogle()" class="d-flex p-2 px-3 align-items-center nav-tabs">
+              <span><img class="nav-img" src="../../../assets/icons/nav-holidays.png" alt="Hotels" /></span>
+              <input type="radio" name="nav-tabset" id="nav-tab4" />
+              <label class="nav-tab-label ms-1" for="nav-tab4">Hotels</label>
+            </div>
+            <!-- Tab 3 -->
+            <div class="d-flex p-2 px-3 align-items-center nav-tabs">
+              <span><img class="nav-img" src="../../../assets/icons/nav-taxi.png" alt="Cabs" /></span>
+              <input type="radio" name="nav-tabset" id="nav-tab2" />
+              <label class="nav-tab-label ms-1" for="nav-tab2">Cabs</label>
+            </div>
+            <!-- Tab 4 -->
+            <div (click)="redirectToGoogle()" class="d-flex p-2 px-3 align-items-center nav-tabs">
+              <span><img class="nav-img" src="../../../assets/icons/nav-holidays.png" alt="Holidays" /></span>
+              <input type="radio" name="nav-tabset" id="nav-tab5" />
+              <label class="nav-tab-label ms-1" for="nav-tab5">Holidays</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth (Right) -->
+      <div class="d-flex align-items-center gap-2 flex-shrink-0 order-2 order-md-3">
+        <div *ngIf="!isLoggedIn" class="d-flex">
+          <button class="btn signup-btn me-1 btn-sm" type="button" routerLink="/sign-up">Sign Up</button>
+          <button class="btn login-btn btn-sm" type="button" routerLink="/login">Login</button>
+        </div>
+        <div *ngIf="isLoggedIn">
+          <div class="dropdown">
+            <button
+              class="btn d-flex profile-dropdown p-2 btn-sm"
+              type="button"
+              id="profileDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img src="../../../assets/images/profile.svg" alt="User Avatar" class="profile-circle me-2" />
+              <div class="text-dark mt-1 small">{{ username }}</div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <li><a class="dropdown-item small">Profile</a></li>
+              <li><a class="dropdown-item small" (click)="onLogoutClick()">Log Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>

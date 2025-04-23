@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+
+#carouselExampleControls {
+  position: relative;
+
+  .carousel-inner {
+    height: 750px !important;
+
+    .carousel-item {
+      height: 100%; 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .item-one {
+      background: linear-gradient(
+          228deg,
+          rgba(238, 238, 238, 0.486) 0%,
+          rgba(84, 206, 240, 0.486) 100%
+        ),
+        url('../../../../assets/images/hero.jpeg');
+    }
+
+    .item-two {
+      background: linear-gradient(
+          228deg,
+          rgba(238, 238, 238, 0.486) 0%,
+          rgba(84, 206, 240, 0.486) 100%
+        ),
+        url('../../../../assets/images/hero1.jpeg');
+    }
+
+    .item-three {
+      background: linear-gradient(
+          228deg,
+          rgba(238, 238, 238, 0.486) 0%,
+          rgba(84, 206, 240, 0.486) 100%
+        ),
+        url('../../../../assets/images/hero2.jpeg');
+    }
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-size: 100% 100%;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    filter: drop-shadow(0 0 2px #000);
+  }
+}
+
+@media (max-width: 767px) {
+  #carouselExampleControls {
+    display: none;
+  }
+}

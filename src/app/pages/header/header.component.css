@@ -1,0 +1,145 @@
+/* Header Component CSS */
+.header {
+  background-color: #f3f7fc;
+  padding: 10px 0px 10px 0px;
+}
+
+.logo-img {
+  height: 50px;
+  width: 70px;
+  transition: all 0.9s ease-in-out;
+}
+.logo-img:hover {
+  transform: scale(0.7);
+}
+
+.logo-text {
+  display: none;
+  text-transform: uppercase;
+  transition: all 0.5s ease-in-out;
+  font-weight: 500;
+  letter-spacing: 1px;
+  position: absolute;
+  font-size: 8px;
+  bottom: -5px;
+  font-family: var(--poppins);
+}
+.logo-img:hover + .logo-text {
+  display: block;
+}
+
+.separator {
+  width: 2px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.brand-name {
+  font-size: 1rem;
+  color: #222;
+  display: flex;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.brand-word {
+  background: linear-gradient(to right, #00AB9C, #007191);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-family: 'Cursive', sans-serif;
+}
+
+.tabs {
+  margin: 0 auto;
+  flex-grow: 1;
+}
+
+.nav-img {
+  width: 20px;
+  height: 20px;
+}
+
+.nav-tabset > div > input[type="radio"] {
+  position: absolute;
+  left: -200vw;
+}
+
+.nav-tabset > div > label {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.nav-tabset > div {
+  border: 1px solid #00000026;
+  padding: 3px 6px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0px 0px 0px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-radius: 5px;
+  font-size: small;
+  cursor: pointer;
+}
+
+.nav-tabset > div:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.nav-tab-label {
+  font-size: medium;
+  margin-left: 5px;
+}
+
+.btn {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-active {
+  color: var(--white);
+  background-color: var(--primary);
+}
+
+.profile-circle {
+  object-fit: cover;
+  height: 30px;
+  width: 30px;
+}
+
+.profile-dropdown {
+  background-color: #f3f7fc;
+}
+
+.dropdown-toggle:focus {
+  border: none;
+}
+
+.drropdown-item {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .logo-img {
+    height: 50px;
+    width: 70px;
+  }
+
+  .logo-text {
+    font-size: 6px;
+    bottom: -3px;
+  }
+
+  .tabs {
+    margin: 10px 0;
+  }
+
+  .nav-tab-label {
+    font-size: 12px;
+  }
+
+  .nav-tabset > div {
+    padding: 5px;
+    font-size: 14px;
+  }
+}

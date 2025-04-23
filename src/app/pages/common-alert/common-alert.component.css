@@ -1,0 +1,26 @@
+.background-image {
+  position: fixed;
+  display: block;
+}
+.alert-btn {
+  background-color: #007191;
+  color: white;
+  font-size: 12px;
+}
+.modal-dialog{
+  max-width: 400px;
+}
+.modal-message{
+  font-size: 14px;
+}
+.btn-close.small-close {
+  width: 0.45rem;
+  height: 0.45rem;
+  padding: 0.25rem;
+}
+@media (max-width: 768px) {
+  .background-image {
+    width: 80%; /* Adjust width for mobile, you can change this value */
+  }
+}
+  

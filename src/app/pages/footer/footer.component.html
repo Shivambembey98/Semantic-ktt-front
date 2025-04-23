@@ -1,0 +1,33 @@
+<footer id="footer" class="d-flex justify-content-between py-3 px-md-4">
+  <div id="social-links" class="">
+    <div class="">
+      <!-- style="width: 80%; margin: 0 auto; text-align: center" -->
+      <div class="mb-2">
+        <img
+          width="55"
+          height="42"
+          src="../../../../assets/images/logo.png"
+          alt="no image"
+        />
+      </div>
+      <!-- style="text-align: justify" -->
+      <p class="links-subtext">
+        Take you to the blue skies with an easy and enjoyable flight booking
+        experience.
+      </p>
+    </div>
+  </div>
+
+  <div id="quick-links" class="d-flex justify-content-evenly">
+    <div class="row p-0" *ngFor="let section of quickLinksSections">
+      <div class="links col-lg-12">
+        <h5>{{ section.title }}</h5>
+        <ul class="list-unstyled quick-links">
+          <li class="links-subtext" *ngFor="let link of section.links">
+            <a> {{ link }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

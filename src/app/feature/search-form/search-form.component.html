@@ -1,0 +1,72 @@
+<section id="hero">
+  <!-- Carousel Section -->
+  <app-carousel></app-carousel>
+
+  <div class="form-container">
+    <!-- Flight Type Tabs -->
+    <app-flight-type-tabs 
+      [activeTab]="activeTab"
+      (tabChange)="onTabChange($event)">
+    </app-flight-type-tabs>
+
+    <div class="card">
+      <div class="card-body col-lg-12">
+        <!-- One Way Form -->
+        <ng-container *ngIf="oneWayForm">
+          <app-common-flight-fields 
+            [formGroup]="oneWayFormData" 
+            [today]="today"
+            [minToDate]="minToDate" 
+            [listOfAirports]="listOfAirports" 
+            [searchInput$]="searchInput$"
+            [adultOptions]="passengerOptions.adult.options"
+            [childOptions]="passengerOptions.child.options"
+            [infantOptions]="passengerOptions.infant.options"
+            (swapAirports)="swapSelection()" 
+            (airportSelect)="selectAirport($event.event, $event.field)"
+            (returnDateSelected)="handleReturnDateSelection()"
+            (submit)="submitOneWayFormData()">
+          </app-common-flight-fields>
+        </ng-container>
+
+        <!-- Round Trip Form -->
+        <ng-container *ngIf="roundTripForm">
+          <app-common-flight-fields 
+            [formGroup]="roundTripFormData" 
+            [today]="today" 
+            [minToDate]="minToDate" 
+            [listOfAirports]="listOfAirports" 
+            [searchInput$]="searchInput$"
+            [adultOptions]="passengerOptions.adult.options"
+            [childOptions]="passengerOptions.child.options"
+            [infantOptions]="passengerOptions.infant.options"
+            (swapAirports)="swapSelection()" 
+            (returnDateSelected)="handleReturnDateSelection()"
+            (submit)="submitRoundTripFormData()">
+          </app-common-flight-fields>
+        </ng-container>
+
+        <!-- Multi City Form -->
+        <ng-container *ngIf="multiCityForm">
+          <form [formGroup]="multiCityFormData" (ngSubmit)="submitMultiCityFormData()">
+            <app-multi-city-fields 
+              [formGroup]="multiCityFormData"
+              [listOfAirports]="listOfAirports"
+              [searchInput$]="searchInput$"
+              [adultOptions]="passengerOptions.adult.options"
+              [childOptions]="passengerOptions.child.options"
+              [infantOptions]="passengerOptions.infant.options"
+              [activeFlightIndex]="activeFlightIndex"
+              (airportSelect)="selectAirport2($event.event, $event.field)"
+              (swapAirports)="swapSelection()"
+              (submit)="submitMultiCityFormData()"
+              (addLegClick)="addLeg()"
+              (removeLegClick)="removeLeg($event)"
+              (activeFlightIndexChange)="setActiveFlightIndex($event)">
+            </app-multi-city-fields>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>
