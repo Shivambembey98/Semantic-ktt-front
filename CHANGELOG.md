@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v2.0.0...v3.0.0) (2025-04-24)
+
+
+### Features
+
+* delete emptyfile.txt ([ab3f56f](https://github.com/Shivambembey98/Semantic-ktt-front/commit/ab3f56fc55941badb88132148885268fe9e49ce9))
+
+
+### BREAKING CHANGES
+
+* check major version bump
+
 # [2.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.2.0...v2.0.0) (2025-04-24)
 
 
