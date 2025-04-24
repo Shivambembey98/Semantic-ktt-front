@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.2.0...v2.0.0) (2025-04-24)
+
+
+### Features
+
+* delete tempfile2.txt ([d57b6d2](https://github.com/Shivambembey98/Semantic-ktt-front/commit/d57b6d238029960906ab88d77b291b86066cb378))
+
+
+### BREAKING CHANGES
+
+* checking major version bump
+
 # [1.2.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.1.1...v1.2.0) (2025-04-24)
 
 
