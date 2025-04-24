@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.1.1...v1.2.0) (2025-04-24)
+
+
+### Features
+
+* Create tempfile2.txt ([275a289](https://github.com/Shivambembey98/Semantic-ktt-front/commit/275a289f20710065ad0e642489c14c3c9233a47b))
+
 ## [1.1.1](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.1.0...v1.1.1) (2025-04-24)
 
 
