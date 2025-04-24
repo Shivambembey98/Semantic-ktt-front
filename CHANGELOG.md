@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.1.0...v1.1.1) (2025-04-24)
+
+
+### Performance Improvements
+
+* checking version bump through local push ([6befc32](https://github.com/Shivambembey98/Semantic-ktt-front/commit/6befc3246a7fb21a73ed079db3094b9ef37e4ff4))
+
 # [1.1.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v1.0.0...v1.1.0) (2025-04-23)
 
 
