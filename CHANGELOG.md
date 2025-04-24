@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v3.1.0...v4.0.0) (2025-04-24)
+
+
+### Features
+
+* rewrite authentication ([ae0c2b9](https://github.com/Shivambembey98/Semantic-ktt-front/commit/ae0c2b91cde12f40400d152898dc2ea27c9c1cd0))
+
+
+### BREAKING CHANGES
+
+* Testing major version Bump
+
 # [3.1.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v3.0.0...v3.1.0) (2025-04-24)
 
 
