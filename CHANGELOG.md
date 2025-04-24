@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v3.0.0...v3.1.0) (2025-04-24)
+
+
+### Features
+
+* initial commit ([f89e054](https://github.com/Shivambembey98/Semantic-ktt-front/commit/f89e0541b950a830666da5fc3cabfedd47f37815))
+
 # [3.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v2.0.0...v3.0.0) (2025-04-24)
 
 
