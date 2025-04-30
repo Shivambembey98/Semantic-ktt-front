@@ -12,9 +12,18 @@
     "prepare": "husky install"
   },
   "release": {
-    "branches": [
-      "main"
-    ],
+  "branches": [
+    {
+      "name": "main",
+      "channel": "latest",
+      "prerelease": false
+    },
+    {
+      "name": "develop",
+      "channel": "beta",
+      "prerelease": true
+    }
+  ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
