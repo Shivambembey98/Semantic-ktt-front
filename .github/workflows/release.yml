@@ -18,7 +18,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  Required to avoid HEAD~1 errors
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -30,7 +30,8 @@ jobs:
 
       - name: Lint Last Commit Message
         run: |
-          npx --yes @commitlint/cli@latest --config .commitlintrc.yml --from=HEAD~1 --to=HEAD
+          echo "🔍 Linting latest commit..."
+          ./node_modules/.bin/commitlint --from=HEAD~1 --to=HEAD
 
       - name: Run Semantic Release
         env:
