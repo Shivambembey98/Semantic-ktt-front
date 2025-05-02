@@ -7,8 +7,8 @@ on:
       - develop
 
 permissions:
-  contents: write  # allow pushing tags, creating releases
-  issues: write    # optional, allow creating issues when release fails
+  contents: write
+  issues: write
 
 jobs:
   release:
@@ -21,10 +21,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # or whatever you're using
+          node-version: 18
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Lint last commit message
+        run: |
+          npx --yes @commitlint/cli@latest --config .commitlintrc.yml --from=HEAD~1 --to=HEAD
 
       - name: Semantic Release
         env:
