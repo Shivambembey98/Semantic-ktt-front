@@ -30,7 +30,6 @@ jobs:
 
       - name: Lint Last Commit Message
         run: |
-          echo "🔍 Linting latest commit..."
           ./node_modules/.bin/commitlint --from=HEAD~1 --to=HEAD
 
       - name: Run Semantic Release
