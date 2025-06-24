@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v5.1.0...v6.0.0) (2025-06-24)
+
+
+### Features
+
+* create emptyfile ([165179c](https://github.com/Shivambembey98/Semantic-ktt-front/commit/165179cd0218fdb5759f338db8f1647589d9c4d1))
+
+
+### BREAKING CHANGES
+
+* changed how login system works
+
 # [5.1.0](https://github.com/Shivambembey98/Semantic-ktt-front/compare/v5.0.0...v5.1.0) (2025-06-24)
 
 
